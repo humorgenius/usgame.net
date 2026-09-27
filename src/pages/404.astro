@@ -1,0 +1,47 @@
+---
+/**
+ * 404 页。两种情形都会落到这里：站内点错了链接，或者外部链接指向一个不存在的地址。
+ * 静态托管（GitHub Pages）会自动把 dist/404.html 用在任何找不到的路径上。
+ *
+ * 为什么外壳用中文、正文中英并列：404 无从知道访客想说哪种语言，跟网关页一样
+ * 两种都给，中文在上（与网关页的中文优先一致）。
+ * noindex：错误页不该进索引，也已在 astro.config 里排除出 sitemap。
+ *
+ * 样式只用全站现有类（wrap / kicker / art-title / art-dek / body），不自造新 CSS ——
+ * 这样它和其他页共用同一条文字轴，不会看起来像另一个网站。
+ */
+import Base from "../layouts/Base.astro";
+import { SITE, SECTIONS } from "../i18n";
+
+const line = (lang: "zh" | "en") =>
+  SECTIONS.map((s) => ({ href: `/${lang}/${s.k}/`, label: s[lang] }));
+---
+<Base lang="zh" title={`找不到这个页面（404）| ${SITE.name}`} noindex>
+  <div class="wrap" style="max-width:68ch;padding-top:20px">
+    <p class="kicker" style="margin-top:22px">
+      <span class="dot" aria-hidden="true"></span><span>404</span>
+    </p>
+    <h1 class="art-title" style="margin-top:16px">这个页面不存在</h1>
+    <p class="art-dek">地址可能写错了，或者这篇内容还没写。下面的入口都能用。</p>
+
+    <div class="body">
+      <p>
+        {line("zh").map((l, i) => (
+          <>{i > 0 && " · "}<a href={l.href}>{l.label}</a></>
+        ))}
+        {" · "}<a href="/zh/search/">站内搜索</a>
+        {" · "}<a href="/zh/">中文首页</a>
+      </p>
+
+      <h2>This page doesn&rsquo;t exist</h2>
+      <p>The address may be mistyped, or the content isn&rsquo;t written yet. Everything below works.</p>
+      <p>
+        {line("en").map((l, i) => (
+          <>{i > 0 && " · "}<a href={l.href}>{l.label}</a></>
+        ))}
+        {" · "}<a href="/en/search/">Search</a>
+        {" · "}<a href="/en/">English home</a>
+      </p>
+    </div>
+  </div>
+</Base>

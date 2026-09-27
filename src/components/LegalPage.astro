@@ -1,0 +1,54 @@
+---
+// 合规页的共用模板。三页（隐私/免责/联系）版式必须完全一致，
+// 所以外壳只写这一份 —— 与 about.astro 用同一套类，排版天然对齐。
+import Base from "../layouts/Base.astro";
+import { t, SITE, type Lang } from "../i18n";
+import type { Block } from "../data/legal";
+
+interface Props {
+  lang: Lang;
+  kicker: string;
+  title: string;
+  description: string;
+  h1: string;
+  lede: string;
+  blocks: Block[];
+  updated?: string;
+  email?: string;      // 只有联系页传：渲染一个可点的 mailto
+}
+const { lang, kicker, title, description, h1, lede, blocks, updated, email } = Astro.props;
+---
+<Base lang={lang} title={`${title} | ${SITE.name}`} description={description}>
+  <div class="wrap" style="max-width:68ch;padding-top:20px">
+    <nav class="crumb" style="padding-top:0" aria-label="Breadcrumb">
+      <ol>
+        <li><a href={`/${lang}/`}>{t("home", lang)}</a></li>
+        <li><span aria-current="page">{kicker}</span></li>
+      </ol>
+    </nav>
+
+    <p class="kicker" style="margin-top:22px"><span class="dot" aria-hidden="true"></span><span>{kicker}</span></p>
+    <h1 class="art-title" style="margin-top:16px">{h1}</h1>
+    <p class="art-dek">{lede}</p>
+    {updated && (
+      <p class="muted" style="font-size:13px;margin-top:14px">
+        {t("legalUpdated", lang)} {updated}
+      </p>
+    )}
+
+    {email && (
+      <p style="margin-top:26px">
+        <a class="btn btn-solid" href={`mailto:${email}`}>{email}</a>
+      </p>
+    )}
+
+    <div class="body">
+      {blocks.map((b) => (
+        <>
+          <h2>{b.h}</h2>
+          {b.p.map((para) => <p>{para}</p>)}
+        </>
+      ))}
+    </div>
+  </div>
+</Base>

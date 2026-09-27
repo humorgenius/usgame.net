@@ -1,0 +1,94 @@
+---
+// 栏目列表页：/{lang}/{section}/
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import {
+  SECTIONS, sectionLabel, articlePath, SECTION_INTRO, crumbTag, t, SITE, type Lang,
+} from "../../../i18n";
+
+export async function getStaticPaths() {
+  const all = await getCollection("articles", ({ data }) => !data.draft);
+  const keys = [...new Set(all.map((a) => `${a.data.lang}/${a.data.section}`))];
+  return keys.map((k) => {
+    const [lang, section] = k.split("/");
+    return { params: { lang, section } };
+  });
+}
+
+interface Props { lang: Lang; section: string }
+const { lang, section } = Astro.params as unknown as Props;
+
+const entries = (await getCollection("articles", ({ data }) =>
+  !data.draft && data.lang === lang && data.section === section
+)).sort((a, b) => a.data.order - b.data.order);
+
+const sec = SECTIONS.find((s) => s.k === section);
+const name = sectionLabel(section, lang);
+const intro = SECTION_INTRO[section]?.[lang] ?? "";
+
+// 攻略栏目按子类分组，其余栏目平铺
+const grouped = sec?.subs
+  ? sec.subs.map((sb) => ({ sub: sb, items: entries.filter((e) => e.data.subcategory === sb.k) }))
+      .filter((g) => g.items.length)
+  : [{ sub: null, items: entries }];
+const orphans = sec?.subs ? entries.filter((e) => !sec.subs!.some((sb) => sb.k === e.data.subcategory)) : [];
+
+const title = `${name} — GTA6`;
+---
+<Base lang={lang} title={`${title} | ${SITE.name}`} description={intro} type="website">
+  <nav class="crumb wrap" aria-label="Breadcrumb">
+    <ol>
+      <li><a href={`/${lang}/`}>{t("home", lang)}</a></li>
+      <li><span aria-current="page">{name}</span></li>
+    </ol>
+  </nav>
+
+  <header class="wrap sec-head-row" style="padding-top:22px">
+    <div>
+      <h1 class="sec-title">{name}</h1>
+      <p class="art-dek" style="margin-top:14px">{intro}</p>
+    </div>
+    <p class="art-meta" style="border:0;margin:0;padding:0">
+      <span><b>{entries.length}</b> {t("articles", lang)}</span>
+    </p>
+  </header>
+
+  {grouped.map(({ sub, items }) => (
+    <section class="wrap" style="margin-top:44px">
+      {sub && <h2 class="sec-title" style="font-size:1.35rem;margin-bottom:20px">{sub[lang]}</h2>}
+      <div class="rel-grid">
+        {items.map((e) => (
+          <a class="rel-card" href={articlePath(lang, e.data.section, e.data.slug)}>
+            {e.data.cover && <img src={e.data.cover} alt={e.data.title} width="1200" height="675" loading="lazy" decoding="async" />}
+            <span class="k">{crumbTag(e.data.section, e.data.subcategory, lang)}</span>
+            <h3>{e.data.title}</h3>
+            <span class="art-meta" style="border:0;padding:0;margin:0;font-size:12px">
+              <time datetime={e.data.date.toISOString()}>{e.data.date.toISOString().slice(0, 10)}</time>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  {orphans.length > 0 && (
+    <section class="wrap" style="margin-top:44px">
+      <h2 class="sec-title" style="font-size:1.35rem;margin-bottom:20px">{t("latest", lang)}</h2>
+      <div class="rel-grid">
+        {orphans.map((e) => (
+          <a class="rel-card" href={articlePath(lang, e.data.section, e.data.slug)}>
+            {e.data.cover && <img src={e.data.cover} alt={e.data.title} width="1200" height="675" loading="lazy" decoding="async" />}
+            <span class="k">{crumbTag(e.data.section, e.data.subcategory, lang)}</span>
+            <h3>{e.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {entries.length === 0 && (
+    <section class="wrap" style="margin-top:44px">
+      <p class="note">{lang === "en" ? "Nothing here yet." : "这里暂时还没有内容。"}</p>
+    </section>
+  )}
+</Base>

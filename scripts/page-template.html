@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<!-- ============================================================
+     A 方案（霓虹罪恶城）的**内容页**模板 · 新闻 / 攻略详情
+     版心、页头、页脚、语言机制全部沿用 A 首页，保证两者是同一套设计。
+     已按你的要求移除预留广告位（无 AdSense 脚本、无广告容器）。
+     ============================================================ -->
+
+<title>__EN_TITLE__ — USGAME</title>
+<meta name="description" content="__EN_DEK__">
+<meta name="keywords" content="gta 6 wanted level, gta 6 six stars, gta 6 police, GTA6 通缉等级, GTA6 六星, GTA6 警察追捕">
+
+<link rel="canonical" href="https://usgame.net/en/guides/__SLUG_EN__/">
+<link rel="alternate" hreflang="en" href="https://usgame.net/en/guides/__SLUG_EN__/">
+<link rel="alternate" hreflang="zh-Hans" href="https://usgame.net/zh/guides/__SLUG_ZH__/">
+<link rel="alternate" hreflang="x-default" href="https://usgame.net/en/guides/__SLUG_EN__/">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="USGAME">
+<meta property="og:title" content="__EN_TITLE__">
+<meta property="og:description" content="__EN_DEK__">
+<meta property="og:url" content="https://usgame.net/en/guides/__SLUG_EN__/">
+<meta property="og:image" content="https://usgame.net/img/og/__SLUG_EN__.jpg">
+<meta property="og:locale" content="en">
+<meta property="og:locale:alternate" content="zh_Hans">
+<meta property="article:published_time" content="2026-09-19">
+<meta property="article:modified_time" content="2026-09-26">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="__EN_TITLE__">
+<meta name="twitter:description" content="__EN_DEK__">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://usgame.net/en/guides/__SLUG_EN__/#article",
+      "headline": "__EN_TITLE__",
+      "description": "__EN_DEK__",
+      "inLanguage": "en",
+      "datePublished": "2026-09-19T09:00:00+08:00",
+      "dateModified": "2026-09-26T12:00:00+08:00",
+      "image": "https://usgame.net/img/og/__SLUG_EN__.jpg",
+      "author": { "@type": "Organization", "name": "USGAME", "url": "https://usgame.net/" },
+      "publisher": { "@id": "https://usgame.net/#org" },
+      "isPartOf": { "@id": "https://usgame.net/#website" },
+      "about": { "@type": "VideoGame", "name": "Grand Theft Auto VI" },
+      "citation": { "@type": "CreativeWork", "name": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://usgame.net/en/" },
+        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://usgame.net/en/guides/" },
+        { "@type": "ListItem", "position": 3, "name": "Systems", "item": "https://usgame.net/en/guides/systems/" },
+        { "@type": "ListItem", "position": 4, "name": "__EN_TITLE__" }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://usgame.net/#website",
+      "url": "https://usgame.net/",
+      "name": "USGAME",
+      "inLanguage": ["en", "zh-Hans"],
+      "publisher": { "@id": "https://usgame.net/#org" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://usgame.net/#org",
+      "name": "USGAME",
+      "url": "https://usgame.net/",
+      "logo": "https://usgame.net/icon-512.png"
+    }
+  ]
+}
+</script>
+
+<style>
+__STYLE__
+
+/* ==========================================================================
+   ARTICLE PAGE  — 追加在 A 首页样式之后，不改动上面任何一个既有规则。
+   版式铁律：全页只有一个版心 .wrap(76rem/24px)，正文列在最左，目录走右轨
+   —— 目录放右侧是为了不让正文文字被推离页头的文字轴。
+   ========================================================================== */
+
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:80;
+  background:linear-gradient(90deg,var(--mag),var(--org));
+  box-shadow:0 0 14px rgba(255,45,149,.7);transition:width .08s linear}
+
+/* ---- breadcrumb：与页头同一条左轴 ---- */
+.crumb{padding-top:20px}
+.crumb ol{display:flex;flex-wrap:wrap;gap:0 10px;list-style:none;font-size:11.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.crumb li+li::before{content:"›";margin-right:10px;color:var(--line-hi)}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--mag)}
+
+/* ---- 两栏：正文列(最左) + 目录右轨。gap 只影响列间距，不动正文左轴 ---- */
+.art-grid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:60px;
+  align-items:start;padding-top:20px}
+
+/* ---- 文章头部 ---- */
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--mag)}
+.kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--mag);
+  box-shadow:0 0 10px var(--mag)}
+.art-title{font-family:var(--font-d);font-weight:400;font-size:clamp(1.95rem,4.1vw,3.05rem);
+  line-height:1.09;letter-spacing:-.005em;margin:16px 0 0;color:var(--ink)}
+.art-dek{margin:18px 0 0;font-size:clamp(1rem,1.35vw,1.1rem);line-height:1.68;color:var(--muted);
+  max-width:60ch}
+.art-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px;margin-top:24px;
+  padding-top:18px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--dim)}
+.art-meta b{color:var(--ink);font-weight:600}
+.art-meta .sep{width:1px;height:12px;background:var(--hair)}
+.art-meta .src a{color:var(--muted);border-bottom:1px solid var(--line-hi)}
+
+/* ---- 封面 ---- */
+.art-cover{margin:30px 0 0;border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
+.art-cover img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+
+/* ---- 正文排版 ---- */
+.body{font-size:1.02rem;line-height:1.82;color:#E6DEE9}
+.body>p:first-of-type{margin-top:30px}
+.body p{margin:0 0 1.15em}
+.body h2{font-family:var(--font-d);font-weight:400;font-size:clamp(1.32rem,2.15vw,1.72rem);
+  line-height:1.2;margin:2.3em 0 .75em;color:var(--ink);scroll-margin-top:96px}
+.body h2::before{content:"";display:block;width:34px;height:3px;border-radius:2px;
+  background:var(--mag);margin-bottom:15px}
+.body ul{list-style:disc;margin:0 0 1.3em;padding-left:1.35em}
+.body li{padding-left:.18em;margin-bottom:.52em}
+.body li:last-child{margin-bottom:0}
+.body li::marker{color:var(--mag)}
+.body ol{list-style:decimal;margin:0 0 1.3em;padding-left:1.5em}
+.body strong{color:#fff;font-weight:600}
+.body blockquote{margin:1.6em 0;padding:20px 26px;background:var(--panel);
+  border-left:3px solid var(--mag);border-radius:0 var(--r-sm) var(--r-sm) 0;
+  font-size:1.06rem;line-height:1.72;color:var(--ink)}
+.body figure{margin:1.9em 0}
+.body figure img{display:block;width:100%;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:var(--panel)}
+.body figcaption{margin-top:10px;font-size:11.5px;letter-spacing:.03em;color:var(--dim)}
+
+.tbl-scroll{overflow-x:auto;margin:1.7em 0;border:1px solid var(--line);
+  border-radius:var(--r-sm);background:var(--panel)}
+.body table{width:100%;border-collapse:collapse;font-size:.94rem;min-width:520px}
+.body th{text-align:left;padding:13px 17px;background:var(--panel-hi);
+  border-bottom:1px solid var(--line);font-size:11px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.body td{padding:13px 17px;border-bottom:1px solid var(--hair);vertical-align:top;color:var(--muted)}
+.body td:first-child{color:var(--ink);font-weight:500}
+.body tbody tr:last-child td{border-bottom:0}
+.body tbody tr:hover td{background:rgba(255,45,149,.05)}
+
+/* 中文正文：汉字等宽，两端对齐后右边缘才齐；标题保持左对齐 */
+html[data-lang="zh"] .body{text-align:justify;line-height:1.92;font-size:1.04rem}
+html[data-lang="zh"] .body h2,
+html[data-lang="zh"] .body li{text-align:left}
+html[data-lang="zh"] .art-title{line-height:1.2;letter-spacing:.01em}
+
+/* ---- 语言互斥：只显示当前语言的那一份正文/目录 ---- */
+html[data-lang="en"] [data-loc="zh"],
+html[data-lang="zh"] [data-loc="en"]{display:none !important}
+
+/* ---- 右轨：目录 + 相关 ---- */
+.rail{position:sticky;top:86px;display:grid;gap:18px;align-content:start}
+.toc{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+  padding:18px 16px}
+.toc-h{font-family:var(--font-b);font-size:11px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 12px;padding-left:10px}
+.toc ol{list-style:none;display:grid;gap:1px}
+.toc a{display:block;padding:7px 10px;font-size:13px;line-height:1.4;color:var(--muted);
+  text-decoration:none;border-left:2px solid transparent;border-radius:0 var(--r-sm) var(--r-sm) 0}
+.toc a:hover{color:var(--ink);background:var(--panel-hi)}
+.toc a.on{color:var(--ink);background:var(--panel-hi);border-left-color:var(--mag)}
+
+.rail-card{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+  padding:18px 16px}
+.rail-card h3{font-family:var(--font-b);font-size:11px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.rail-card ul{list-style:none;display:grid;gap:11px}
+.rail-card a{display:grid;grid-template-columns:56px minmax(0,1fr);gap:11px;align-items:center;
+  text-decoration:none;color:var(--muted);font-size:13px;line-height:1.35}
+.rail-card img{width:56px;aspect-ratio:1;object-fit:cover;border-radius:var(--r-sm)}
+.rail-card a:hover{color:var(--ink)}
+.rail-card .tag{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mag);margin-bottom:3px}
+
+/* ---- 移动端目录（桌面隐藏） ---- */
+.toc-m{display:none;margin:26px 0 0;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--panel);overflow:hidden}
+.toc-m summary{padding:14px 18px;cursor:pointer;font-size:12.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);list-style:none}
+.toc-m summary::-webkit-details-marker{display:none}
+.toc-m summary::after{content:"＋";float:right;color:var(--mag)}
+.toc-m[open] summary::after{content:"－"}
+.toc-m ol{list-style:none;padding:0 10px 12px}
+.toc-m a{display:block;padding:9px 10px;font-size:13.5px;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--hair)}
+
+/* ---- 标签 + 来源声明 ---- */
+.art-foot{margin-top:44px;padding-top:26px;border-top:1px solid var(--hair)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags a{font-size:11.5px;letter-spacing:.08em;padding:6px 13px;border-radius:var(--r-pill);
+  border:1px solid var(--line);color:var(--muted);text-decoration:none}
+.tags a:hover{color:var(--ink);border-color:var(--line-hi);background:var(--panel)}
+.note{margin-top:20px;padding:15px 18px;border-radius:var(--r-sm);background:var(--bg-deep);
+  border:1px solid var(--hair);font-size:12.5px;line-height:1.7;color:var(--dim)}
+.note b{color:var(--muted)}
+
+/* ---- 相关阅读 ---- */
+.rel{padding:74px 0 0;border-top:1px solid var(--hair);margin-top:76px}
+.rel-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--pad)}
+.rel-card{display:grid;gap:11px;text-decoration:none;color:inherit}
+.rel-card img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:var(--r-sm);
+  border:1px solid var(--line);transition:transform .3s ease}
+.rel-card:hover img{transform:scale(1.025)}
+.rel-card .k{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mag)}
+.rel-card h3{font-size:1rem;line-height:1.34;font-weight:600;color:var(--ink)}
+
+/* ---- 上一篇 / 下一篇 ---- */
+.pn{margin-top:44px}
+.pn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--pad)}
+.pn a{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+  padding:18px 20px;text-decoration:none;display:grid;gap:7px;transition:border-color .2s,background .2s}
+.pn a:hover{border-color:var(--line-hi);background:var(--panel-hi)}
+.pn .lab{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.pn .ttl{font-size:.98rem;line-height:1.35;color:var(--ink)}
+.pn .next{text-align:right}
+
+/* ---- 断点 ---- */
+@media (max-width:1100px){
+  .art-grid{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{display:none}
+  .toc-m{display:block}
+}
+@media (max-width:900px){
+  .rel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+}
+@media (max-width:560px){
+  .rel-grid{grid-template-columns:minmax(0,1fr)}
+  .pn-grid{grid-template-columns:minmax(0,1fr)}
+  .art-meta{gap:5px 14px;font-size:12px}
+  .art-meta .sep{display:none}
+  .body{font-size:1rem}
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main" data-en="Skip to content" data-zh="跳到正文">Skip to content</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+__HEADER__
+
+<main id="main">
+
+  <!-- ============================ BREADCRUMB ============================ -->
+  <nav class="crumb wrap" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="#" data-en="Home" data-zh="首页">Home</a></li>
+      <li><a href="#" data-en="Guides" data-zh="攻略">Guides</a></li>
+      <li><a href="#" data-en="Systems" data-zh="机制">Systems</a></li>
+      <li><span aria-current="page" data-en="Wanted level" data-zh="通缉等级">Wanted level</span></li>
+    </ol>
+  </nav>
+
+  <div class="wrap art-grid">
+
+    <!-- ============================ ARTICLE ============================ -->
+    <article class="art">
+
+      <p class="kicker"><span class="dot" aria-hidden="true"></span>
+        <span data-en="Guides · Systems" data-zh="攻略 · 机制">Guides · Systems</span>
+      </p>
+
+      <h1 class="art-title" data-en="__EN_TITLE_ATTR__" data-zh="__ZH_TITLE_ATTR__">__EN_TITLE__</h1>
+
+      <p class="art-dek" data-en="__EN_DEK_ATTR__" data-zh="__ZH_DEK_ATTR__">__EN_DEK__</p>
+
+      <div class="art-meta">
+        <span><b data-en="USGAME staff" data-zh="USGAME 编辑部">USGAME staff</b></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span><time datetime="2026-09-19" data-en="Published Sep 19, 2026" data-zh="发布于 2026-09-19">Published Sep 19, 2026</time></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span><time datetime="2026-09-26" data-en="Updated Sep 26, 2026" data-zh="更新于 2026-09-26">Updated Sep 26, 2026</time></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span data-en="__EN_MIN__ min read" data-zh="__ZH_MIN__ 分钟阅读">__EN_MIN__ min read</span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="src"><span data-en="Source:" data-zh="来源：">Source:</span>
+          <a href="https://www.rockstargames.com/newswire" rel="nofollow noopener" target="_blank">Rockstar Newswire</a></span>
+      </div>
+
+      <figure class="art-cover">
+        <img src="../assets/img/scene-moody.webp" width="1200" height="675"
+             alt="GTA6 通缉系统：警灯下的杰森 / Jason under police lights in GTA6"
+             loading="eager" fetchpriority="high" decoding="async">
+      </figure>
+
+      <!-- 移动端目录（桌面端在右轨） -->
+      <details class="toc-m" data-loc="en">
+        <summary>On this page</summary>
+        <ol>__EN_TOC__</ol>
+      </details>
+      <details class="toc-m" data-loc="zh">
+        <summary>本页目录</summary>
+        <ol>__ZH_TOC__</ol>
+      </details>
+
+      <!-- ---------- 英文正文 ---------- -->
+      <div class="body" data-loc="en" lang="en">
+        __EN_BODY__
+      </div>
+
+      <!-- ---------- 中文正文 ---------- -->
+      <div class="body" data-loc="zh" lang="zh-Hans">
+        __ZH_BODY__
+      </div>
+
+      <footer class="art-foot">
+        <div class="tags">
+          <a href="#" data-en="#GTA6" data-zh="#GTA6">#GTA6</a>
+          <a href="#" data-en="#wanted level" data-zh="#通缉等级">#wanted level</a>
+          <a href="#" data-en="#police pursuit" data-zh="#警察追捕">#police pursuit</a>
+          <a href="#" data-en="#six stars" data-zh="#六星系统">#six stars</a>
+          <a href="#" data-en="#systems" data-zh="#机制解析">#systems</a>
+        </div>
+        <p class="note">
+          <b data-en="Sourcing note." data-zh="来源说明。">Sourcing note.</b>
+          <span data-en="Every claim on this page is tied to a public Rockstar Games statement, an official trailer frame, or a press interview. Where something is unconfirmed we say so in the sentence itself, not in a footnote. Spotted an error? Tell us and we will date the correction."
+                data-zh="本页每一条结论都对应一处公开的 Rockstar 官方表述、官方预告片画面或媒体采访。凡是未经确认的，我们在句子里直接说明，不藏在脚注里。发现错误请告诉我们，我们会标注更正日期。">Every claim on this page is tied to a public Rockstar Games statement, an official trailer frame, or a press interview.</span>
+        </p>
+      </footer>
+    </article>
+
+    <!-- ============================ RIGHT RAIL ============================ -->
+    <aside class="rail">
+      <nav class="toc" data-loc="en" aria-label="On this page">
+        <p class="toc-h">On this page</p>
+        <ol>__EN_TOC__</ol>
+      </nav>
+      <nav class="toc" data-loc="zh" aria-label="本页目录">
+        <p class="toc-h">本页目录</p>
+        <ol>__ZH_TOC__</ol>
+      </nav>
+
+      <div class="rail-card">
+        <h3 data-en="Most read" data-zh="最多人读">Most read</h3>
+        <ul>
+          <li><a href="#"><img src="../assets/img/scene-car-night.webp" width="700" height="394" alt="" loading="lazy">
+            <span><span class="tag" data-en="Guides" data-zh="攻略">Guides</span>
+            <span data-en="Six stars are back: how the wanted system works" data-zh="六星回归：通缉系统究竟怎么运作">Six stars are back: how the wanted system works</span></span></a></li>
+          <li><a href="#"><img src="../assets/img/scene-street-night.webp" width="700" height="394" alt="" loading="lazy">
+            <span><span class="tag" data-en="Map" data-zh="地图">Map</span>
+            <span data-en="Leonida, region by region" data-zh="雷欧奈达州：逐区拆解">Leonida, region by region</span></span></a></li>
+          <li><a href="#"><img src="../assets/img/scene-weapons.webp" width="700" height="394" alt="" loading="lazy">
+            <span><span class="tag" data-en="Weapons" data-zh="武器">Weapons</span>
+            <span data-en="Weapon system: from infinite pockets to loadouts" data-zh="武器系统：告别无限口袋">Weapon system: from infinite pockets to loadouts</span></span></a></li>
+          <li><a href="#"><img src="../assets/img/scene-dance.webp" width="700" height="394" alt="" loading="lazy">
+            <span><span class="tag" data-en="Characters" data-zh="角色">Characters</span>
+            <span data-en="Lucia Caminos: out of prison, rewriting the odds" data-zh="露西亚·卡米诺斯：出狱之后">Lucia Caminos: out of prison, rewriting the odds</span></span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============================ RELATED ============================ -->
+  <section class="rel">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 class="sec-title" data-en="Keep reading" data-zh="继续阅读">Keep reading</h2>
+        <a class="more" href="#"><span data-en="All guides" data-zh="全部攻略">All guides</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="rel-grid">
+        <a class="rel-card" href="#">
+          <img src="../assets/img/scene-pool.webp" width="1200" height="675" alt="GTA6 警察追捕系统" loading="lazy">
+          <span class="k" data-en="Guides" data-zh="攻略">Guides</span>
+          <h3 data-en="Police pursuit: six stars and a smarter wanted mechanic" data-zh="警察追捕系统：六星回归与更聪明的通缉机制">Police pursuit: six stars and a smarter wanted mechanic</h3>
+        </a>
+        <a class="rel-card" href="#">
+          <img src="../assets/img/scene-street-night.webp" width="1200" height="670" alt="GTA6 证人系统" loading="lazy">
+          <span class="k" data-en="Guides" data-zh="攻略">Guides</span>
+          <h3 data-en="The witness system: what happens when a crime is seen" data-zh="证人系统：犯罪被“看见”之后的真实后果">The witness system: what happens when a crime is seen</h3>
+        </a>
+        <a class="rel-card" href="#">
+          <img src="../assets/img/scene-weapons.webp" width="1200" height="676" alt="GTA6 犯罪任务" loading="lazy">
+          <span class="k" data-en="Guides" data-zh="攻略">Guides</span>
+          <h3 data-en="Robbery planning: how every heist is built" data-zh="抢劫机制：每一票的行动结构">Robbery planning: how every heist is built</h3>
+        </a>
+        <a class="rel-card" href="#">
+          <img src="../assets/img/scene-tropical.webp" width="1200" height="675" alt="GTA6 新交互系统" loading="lazy">
+          <span class="k" data-en="Systems" data-zh="机制">Systems</span>
+          <h3 data-en="The new interaction system: more real, more consequence" data-zh="新交互系统：更真实、更有后果的开放世界">The new interaction system: more real, more consequence</h3>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PREV / NEXT ============================ -->
+  <nav class="pn wrap" aria-label="Article navigation">
+    <div class="pn-grid">
+      <a href="#">
+        <span class="lab" data-en="Previous" data-zh="上一篇">Previous</span>
+        <span class="ttl" data-en="Vehicle system deep dive: physics, tuning and the new handling model" data-zh="载具系统详解：物理、改装与全新驾驶体验">Vehicle system deep dive: physics, tuning and the new handling model</span>
+      </a>
+      <a class="next" href="#">
+        <span class="lab" data-en="Next" data-zh="下一篇">Next</span>
+        <span class="ttl" data-en="Money early: businesses, safehouses and cash flow" data-zh="前期赚钱：生意、安全屋与现金流">Money early: businesses, safehouses and cash flow</span>
+      </a>
+    </div>
+  </nav>
+</main>
+
+__FOOTER__
+
+<script>
+__SCRIPT__
+</script>
+
+<script>
+/* ---- 内容页追加脚本：阅读进度 + 目录高亮。不动上面 A 首页的脚本 ---- */
+(function () {
+  var bar = document.getElementById('progress');
+  var tocLinks = [].slice.call(document.querySelectorAll('.toc a, .toc-m a'));
+
+  /* 只看**当前语言**那一份正文。隐藏的那一份每个 getBoundingClientRect().top 都是 0，
+     会把 activeId 一路顶到最后一个隐藏章节，目录就永远高亮在最后一节上。 */
+  function activeSections() {
+    var locale = document.documentElement.getAttribute('data-lang') || 'en';
+    return document.querySelectorAll('.body[data-loc="' + locale + '"] section[id]');
+  }
+
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    if (bar) bar.style.width = (h > 0 ? Math.min(100, (scrollY / h) * 100) : 0) + '%';
+    var activeId = null;
+    activeSections().forEach(function (s) {
+      if (s.getBoundingClientRect().top <= 140) activeId = s.id;
+    });
+    tocLinks.forEach(function (a) {
+      a.classList.toggle('on', a.getAttribute('href') === '#' + activeId);
+    });
+  }
+
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.addEventListener('click', function () { setTimeout(onScroll, 0); });
+  });
+  onScroll();
+})();
+</script>
+</body>
+</html>

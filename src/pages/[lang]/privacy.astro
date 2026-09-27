@@ -1,0 +1,22 @@
+---
+// 合规页：privacy。文案全部在 src/data/legal.ts —— 改文字不用碰这个文件。
+import LegalPage from "../../components/LegalPage.astro";
+import { LANGS, t, type Lang } from "../../i18n";
+import { PRIVACY_META, PRIVACY, LEGAL_UPDATED } from "../../data/legal";
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+const M = PRIVACY_META[lang];
+---
+<LegalPage
+  lang={lang}
+  kicker={t("privacy", lang)}
+  title={M.title}
+  description={M.description}
+  h1={M.h1}
+  lede={M.lede}
+  blocks={PRIVACY[lang]}
+  updated={LEGAL_UPDATED}
+/>

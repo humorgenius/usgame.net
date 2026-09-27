@@ -1,0 +1,73 @@
+---
+// 关于本站。页头导航里有 About，不建它就是一个 404。
+// 内容只写能被我们自己验证的事实：站点性质、来源政策、语言、联系方式占位。
+import Base from "../../layouts/Base.astro";
+import { LANGS, t, SITE, type Lang } from "../../i18n";
+import { CONTACT_EMAIL } from "../../data/legal";
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+
+const C = lang === "en"
+  ? {
+      title: "About USGAME",
+      description: "What this site is, how we source it, and what we refuse to publish.",
+      h1: "About USGAME",
+      lede: "USGAME is an independent, two-language resource for Grand Theft Auto VI. It is run by players, not by Rockstar Games.",
+      blocks: [
+        ["Where our information comes from", "Every article traces back to a public source: Rockstar Newswire posts, official trailer frames, Take-Two investor materials, or named press interviews. When a claim is an analyst estimate or a community theory, the sentence says so. Our editorial note at the foot of each article repeats this commitment."],
+        ["What we do not do", "We do not publish leaked material, we do not present speculation as confirmed fact, and we do not invent quotes. If something is unknown, the article says it is unknown rather than filling the gap."],
+        ["Two languages, one article", "Every piece exists in English and Chinese. Both versions share the same URL slug, so switching language keeps you on the page you were reading instead of sending you back to the homepage."],
+        ["Corrections", "Errors are corrected in place and dated. If you spot one, write to us and we will fix it and say when."],
+      ],
+      contactH: "Contact",
+      contact: `Editorial enquiries and corrections: ${CONTACT_EMAIL}`,
+      legalH: "Trademarks",
+      legal: "Grand Theft Auto, GTA and Rockstar Games are trademarks of Take-Two Interactive Software, Inc. USGAME is an unofficial fan resource and is not affiliated with or endorsed by Take-Two or Rockstar Games.",
+    }
+  : {
+      title: "关于 USGAME",
+      description: "这个站是什么、稿件从哪来、我们拒绝发什么。",
+      h1: "关于 USGAME",
+      lede: "USGAME 是一个独立运营的《GTA6》双语资料站，由玩家维护，与 Rockstar Games 无关。",
+      blocks: [
+        ["信息从哪来", "每一篇的结论都能追到一处公开来源：Rockstar Newswire 公告、官方预告片画面、Take-Two 财报表述，或具名的媒体采访。凡是分析师预测或社区猜想，句子里会直接写明。每篇文末的来源说明重复这一条承诺。"],
+        ["我们不做的事", "不发布泄露素材，不把猜测写成已确认，不编造引语。不知道的就说不知道，不用填充内容把空缺补上。"],
+        ["两种语言，同一篇文章", "每篇稿件都有中文与英文版，共用同一个 URL 标识。所以切换语言会把您留在当前正在读的那一篇，而不是送回首页。"],
+        ["更正", "发现错误我们在原文处改正并标注日期。麻烦您来信指出。"],
+      ],
+      contactH: "联系方式",
+      contact: `编辑事务与纠错：${CONTACT_EMAIL}`,
+      legalH: "商标声明",
+      legal: "Grand Theft Auto、GTA 与 Rockstar Games 是 Take-Two Interactive Software, Inc. 的商标。USGAME 为非官方爱好者站点，与 Take-Two 及 Rockstar Games 无隶属或授权关系。",
+    };
+---
+<Base lang={lang} title={`${C.title} | ${SITE.name}`} description={C.description}>
+  <div class="wrap" style="max-width:68ch;padding-top:20px">
+    <nav class="crumb" style="padding-top:0" aria-label="Breadcrumb">
+      <ol>
+        <li><a href={`/${lang}/`}>{t("home", lang)}</a></li>
+        <li><span aria-current="page">{t("about", lang)}</span></li>
+      </ol>
+    </nav>
+
+    <p class="kicker" style="margin-top:22px"><span class="dot" aria-hidden="true"></span><span>{t("about", lang)}</span></p>
+    <h1 class="art-title" style="margin-top:16px">{C.h1}</h1>
+    <p class="art-dek">{C.lede}</p>
+
+    <div class="body">
+      {C.blocks.map(([h, p]) => (
+        <>
+          <h2>{h}</h2>
+          <p>{p}</p>
+        </>
+      ))}
+      <h2>{C.legalH}</h2>
+      <p>{C.legal}</p>
+      <h2>{C.contactH}</h2>
+      <p>{C.contact}</p>
+    </div>
+  </div>
+</Base>

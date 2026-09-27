@@ -1,0 +1,21 @@
+---
+// 合规页：disclaimer。文案全部在 src/data/legal.ts —— 改文字不用碰这个文件。
+import LegalPage from "../../components/LegalPage.astro";
+import { LANGS, t, type Lang } from "../../i18n";
+import { DISCLAIMER_META, DISCLAIMER } from "../../data/legal";
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+const M = DISCLAIMER_META[lang];
+---
+<LegalPage
+  lang={lang}
+  kicker={t("disclaimer", lang)}
+  title={M.title}
+  description={M.description}
+  h1={M.h1}
+  lede={M.lede}
+  blocks={DISCLAIMER[lang]}
+/>

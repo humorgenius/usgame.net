@@ -1,0 +1,247 @@
+---
+// 文章详情页：/{lang}/{section}/{slug}/
+// 版式 = design/A-content-page 的已验收样板：面包屑 → 正文列(最左) + 目录右轨
+// → 继续阅读 → 上一篇/下一篇。所有 CSS 都在 src/styles/theme.css 里（与首页同源）。
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import {
+  sectionLabel, subLabel, sectionPath, articlePath, crumbTag, readingMinutes, t, SITE,
+} from "../../../i18n";
+
+export async function getStaticPaths() {
+  const all = await getCollection("articles", ({ data }) => !data.draft);
+  return all.map((entry) => ({
+    params: { lang: entry.data.lang, section: entry.data.section, slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+interface Props { entry: CollectionEntry<"articles"> }
+const { entry } = Astro.props;
+const { lang, section, slug, title, description, dek, cover, subcategory, date, updated } = entry.data;
+const path = Astro.url.pathname;
+
+const { Content, headings } = await render(entry);
+
+// 同一栏目下的邻居：按日期倒序取，用来做「上一篇 / 下一篇」和相关阅读
+const siblings = (await getCollection("articles", ({ data }) =>
+  !data.draft && data.lang === lang && data.section === section
+)).sort((a, b) => a.data.order - b.data.order);
+const i = siblings.findIndex((s) => s.data.slug === slug);
+const prev = siblings[i - 1];   // 原稿顺序的上一篇
+const next = siblings[i + 1];   // 下一篇
+const related = siblings.filter((s) => s.data.slug !== slug).slice(0, 4);
+
+const mins = readingMinutes(entry.body, lang);
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const fmt = (dt: Date) =>
+  lang === "zh"
+    ? `${dt.getUTCFullYear()} 年 ${dt.getUTCMonth() + 1} 月 ${dt.getUTCDate()} 日`
+    : dt.toUTCString().slice(5, 16);
+
+const sub = subLabel(section, subcategory, lang);
+const crumb = [
+  { label: t("home", lang), href: `/${lang}/` },
+  { label: sectionLabel(section, lang), href: sectionPath(lang, section) },
+  ...(sub ? [{ label: sub, href: sectionPath(lang, section) }] : []),
+];
+const kicker = crumbTag(section, subcategory, lang);
+// 面包屑末项用短标题：完整标题（最长 60+ 字符）铺进去会占满整行并换行
+const chars = [...title];
+const shortTitle = chars.length > 46 ? chars.slice(0, 44).join("").trim() + "…" : title;
+
+const jsonld = [
+  {
+    "@type": "Article",
+    "@id": `${SITE.origin}${path}#article`,
+    headline: title,
+    description,
+    inLanguage: lang === "zh" ? "zh-Hans" : "en",
+    datePublished: date.toISOString(),
+    dateModified: updated.toISOString(),
+    ...(cover ? { image: SITE.origin + cover } : {}),
+    author: { "@type": "Organization", name: SITE.name, url: `${SITE.origin}/` },
+    publisher: { "@id": `${SITE.origin}/#org` },
+    isPartOf: { "@id": `${SITE.origin}/#website` },
+    about: { "@type": "VideoGame", name: "Grand Theft Auto VI" },
+  },
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      ...crumb.map((c, n) => ({
+        "@type": "ListItem", position: n + 1, name: c.label, item: SITE.origin + c.href,
+      })),
+      { "@type": "ListItem", position: crumb.length + 1, name: title },
+    ],
+  },
+];
+
+const L = {
+  toPrev: lang === "en" ? "Previous" : "上一篇",
+  toNext: lang === "en" ? "Next" : "下一篇",
+  relatedTitle: lang === "en" ? `More in ${sectionLabel(section, lang)}` : `「${sectionLabel(section, lang)}」更多`,
+  tags: lang === "en" ? "Topics" : "相关话题",
+  noteB: lang === "en" ? "Sourcing note." : "来源说明。",
+  note: lang === "en"
+    ? "Every claim on this page is tied to a public Rockstar Games statement, an official trailer frame, or a press interview. Where something is unconfirmed we say so in the sentence itself, not in a footnote. Spotted an error? Tell us and we will date the correction."
+    : "本页每一条结论都对应一处公开的 Rockstar 官方表述、官方预告片画面或媒体采访。凡是未经确认的，我们在句子里直接说明，不藏在脚注里。发现错误请告诉我们，我们会标注更正日期。",
+  prevNext: lang === "en" ? "Article navigation" : "文章导航",
+};
+---
+<Base lang={lang} title={`${title} | ${SITE.name}`} description={description}
+      type="article" ogImage={cover} published={date} modified={updated} jsonld={jsonld}>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <nav class="crumb wrap" aria-label="Breadcrumb">
+    <ol>
+      {crumb.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+      <li><span aria-current="page">{shortTitle}</span></li>
+    </ol>
+  </nav>
+
+  <div class="wrap art-grid">
+    <article class="art">
+      <p class="kicker"><span class="dot" aria-hidden="true"></span><span>{kicker}</span></p>
+
+      <h1 class="art-title">{title}</h1>
+      {dek && <p class="art-dek">{dek}</p>}
+
+      <div class="art-meta">
+        <span><b>{t("staff", lang)}</b></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span><time datetime={date.toISOString()}>{t("published", lang)} {fmt(date)}</time></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span><time datetime={updated.toISOString()}>{t("updated", lang)} {fmt(updated)}</time></span>
+        <span class="sep" aria-hidden="true"></span>
+        <span>{mins} {t("minRead", lang)}</span>
+      </div>
+
+      {cover && (
+        <figure class="art-cover">
+          <img src={cover} alt={title} width="1600" height="900"
+               loading="eager" fetchpriority="high" decoding="async" />
+        </figure>
+      )}
+
+      {toc.length > 1 && (
+        <details class="toc-m">
+          <summary>{t("onThisPage", lang)}</summary>
+          <ol>
+            {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+          </ol>
+        </details>
+      )}
+
+      <div class="body" lang={lang === "zh" ? "zh-Hans" : "en"}>
+        <Content />
+      </div>
+
+      <footer class="art-foot">
+        <div class="tags">
+          <a href={sectionPath(lang, section)}>#{sectionLabel(section, lang)}</a>
+          {subLabel(section, subcategory, lang) && (
+            <a href={sectionPath(lang, section)}>#{subLabel(section, subcategory, lang)}</a>
+          )}
+          <a href={`/${lang}/`}>#GTA6</a>
+        </div>
+        <p class="note"><b>{L.noteB}</b> <span>{L.note}</span></p>
+      </footer>
+    </article>
+
+    <aside class="rail">
+      {toc.length > 1 && (
+        <nav class="toc" aria-label={t("onThisPage", lang)}>
+          <p class="toc-h">{t("onThisPage", lang)}</p>
+          <ol>
+            {toc.map((h) => (
+              <li class={h.depth === 3 ? "d3" : undefined}><a href={`#${h.slug}`}>{h.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      {related.length > 0 && (
+        <div class="rail-card">
+          <h3>{L.relatedTitle}</h3>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a href={articlePath(lang, r.data.section, r.data.slug)}>
+                  {r.data.cover && <img src={r.data.cover} alt="" width="120" height="120" loading="lazy" decoding="async" />}
+                  <span>
+                    <span class="tag">{sectionLabel(r.data.section, lang)}</span>
+                    <span>{r.data.title}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  </div>
+
+  {related.length > 0 && (
+    <section class="rel">
+      <div class="wrap">
+        <div class="sec-head sec-head-row">
+          <h2 class="sec-title">{t("keepReading", lang)}</h2>
+          <a class="more" href={sectionPath(lang, section)}>
+            <span>{t("allIn", lang)} {sectionLabel(section, lang)}</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="rel-grid">
+          {related.map((r) => (
+            <a class="rel-card" href={articlePath(lang, r.data.section, r.data.slug)}>
+              {r.data.cover && <img src={r.data.cover} alt={r.data.title} width="1200" height="675" loading="lazy" decoding="async" />}
+              <span class="k">{crumbTag(r.data.section, r.data.subcategory, lang)}</span>
+              <h3>{r.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {(prev || next) && (
+    <nav class="pn wrap" aria-label={L.prevNext}>
+      <div class="pn-grid">
+        {prev
+          ? <a href={articlePath(lang, prev.data.section, prev.data.slug)}>
+              <span class="lab">{L.toPrev}</span><span class="ttl">{prev.data.title}</span>
+            </a>
+          : <span></span>}
+        {next && (
+          <a class="next" href={articlePath(lang, next.data.section, next.data.slug)}>
+            <span class="lab">{L.toNext}</span><span class="ttl">{next.data.title}</span>
+          </a>
+        )}
+      </div>
+    </nav>
+  )}
+
+  <script>
+    // 阅读进度 + 目录高亮。只扫正文里的标题（Astro 给每个标题生成了 id）。
+    (function () {
+      var bar = document.getElementById("progress");
+      var links = document.querySelectorAll(".toc a, .toc-m a");
+      var heads = document.querySelectorAll(".body h2[id], .body h3[id]");
+      function onScroll() {
+        var h = document.documentElement.scrollHeight - innerHeight;
+        if (bar) bar.style.width = (h > 0 ? Math.min(100, (scrollY / h) * 100) : 0) + "%";
+        var active = "";
+        heads.forEach(function (el) {
+          if (el.getBoundingClientRect().top <= 140) active = el.getAttribute("id") || "";
+        });
+        links.forEach(function (a) {
+          a.classList.toggle("on", a.getAttribute("href") === "#" + active);
+        });
+      }
+      addEventListener("scroll", onScroll, { passive: true });
+      addEventListener("resize", onScroll);
+      onScroll();
+    })();
+  </script>
+</Base>

@@ -1,0 +1,20 @@
+---
+import Base from "../../layouts/Base.astro";
+import HomeBody from "../../components/HomeBody.astro";
+import { LANGS, type Lang } from "../../i18n";
+
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+
+const title = lang === "en"
+  ? "USGAME — GTA6 news, guides and intel"
+  : "USGAME — GTA6 新闻、攻略与情报";
+const description = lang === "en"
+  ? "An independent GTA6 resource: news, guides, character dossiers and system breakdowns."
+  : "独立的《GTA6》资料站：新闻、攻略、角色档案与系统拆解。";
+---
+<Base lang={lang} title={title} description={description}>
+  <HomeBody lang={lang} />
+</Base>

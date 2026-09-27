@@ -1,0 +1,111 @@
+---
+// 根路径 / —— 双语网关。刻意不自动跳转：搜索引擎与用户都该自己选。
+// 两个语言区块是真实链接（/en/ 与 /zh/），不是 JS 跳转，也不回首页。
+const VERSION = 'v0.1';
+const LANGS = [
+  { code: 'en', href: '/en/', label: 'English',          note: 'News, guides and system breakdowns for GTA VI.', dir: 'ltr' },
+  { code: 'zh', href: '/zh/', label: '简体中文',          note: 'GTA6 新闻、攻略与系统解析。',                    dir: 'ltr' },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>USGAME — GTA6 news, guides and intel</title>
+  <meta name="description" content="An independent GTA6 resource: news, guides, character dossiers and system breakdowns for Grand Theft Auto VI." />
+  <link rel="canonical" href="https://usgame.net/" />
+  <link rel="alternate" hreflang="en" href="https://usgame.net/en/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://usgame.net/zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://usgame.net/en/" />
+
+  {/* 图标与清单：这张网关卡跟其它页面一样要能被收藏、能加到主屏。
+     它是独立页面（不套 Base.astro），所以这些标签得在这儿手写一份。 */}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0B0710" />
+  <meta name="apple-mobile-web-app-title" content="USGAME-GTA6" />
+
+  {/* 分享卡：之前这张首页完全没有任何 og 标签，分享出去是一条没有缩略图的干链接。
+       本页正文按 x-default 用英文，所以也用英文那张卡。 */}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="USGAME" />
+  <meta property="og:title" content="USGAME — GTA6 news, guides and intel" />
+  <meta property="og:description" content="An independent GTA6 resource: news, guides, character dossiers and system breakdowns for Grand Theft Auto VI." />
+  <meta property="og:url" content="https://usgame.net/" />
+  <meta property="og:image" content="https://usgame.net/assets/img/og-default-en.jpg" />
+  <meta property="og:image:alt" content="USGAME — GTA6 news, guides and intel" />
+  <meta property="og:locale" content="en" />
+  <meta property="og:locale:alternate" content="zh_Hans" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="USGAME — GTA6 news, guides and intel" />
+  <meta name="twitter:description" content="An independent GTA6 resource: news, guides, character dossiers and system breakdowns for Grand Theft Auto VI." />
+
+  {/* 站名结构化数据：Google 搜索结果里显示的"站点名称"取自这里，
+       而且要和内容页 Base.astro 里那套用同一组 @id，否则会被当成两个实体。 */}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "@id": "https://usgame.net/#website", url: "https://usgame.net/",
+        name: "USGAME", inLanguage: ["en", "zh-Hans"], publisher: { "@id": "https://usgame.net/#org" } },
+      { "@type": "Organization", "@id": "https://usgame.net/#org", name: "USGAME",
+        url: "https://usgame.net/", logo: "https://usgame.net/icon-512.png" },
+    ],
+  })} />
+  <style>
+    :root{
+      --bg:#0A0612; --panel:#130C1D; --ink:#F4EEF7; --muted:#9A8FA6;
+      --line:#2A1E38; --line-hi:#4A2F5E; --mag:#FF2D95; --r:14px;
+      --font-b:"Inter","Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+      --font-d:Anton,Impact,"Arial Black",Bahnschrift,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font-b);
+         -webkit-font-smoothing:antialiased;min-height:100vh;
+         display:flex;flex-direction:column;justify-content:center}
+    .wrap{width:100%;max-width:52rem;margin:0 auto;padding:0 26px}
+    .brand{display:flex;align-items:baseline;gap:12px;
+           font-family:var(--font-d);text-transform:uppercase;
+           font-size:clamp(2.2rem,7vw,3.4rem);letter-spacing:.02em;line-height:1}
+    .brand .bdg{font-family:var(--font-b);font-size:13px;font-weight:700;
+                letter-spacing:.16em;color:var(--mag);border:1px solid var(--line-hi);
+                border-radius:999px;padding:5px 11px 4px;transform:translateY(-6px)}
+    .lede{margin:18px 0 0;max-width:34rem;font-size:clamp(.95rem,2.2vw,1.08rem);
+          line-height:1.65;color:var(--muted)}
+    .langs{display:grid;gap:12px;margin:34px 0 0;padding:0;list-style:none}
+    @media(min-width:640px){.langs{grid-template-columns:1fr 1fr}}
+    .langs a{display:block;padding:20px 22px;border:1px solid var(--line);
+             border-radius:var(--r);background:var(--panel);color:inherit;
+             text-decoration:none;transition:border-color .18s ease,transform .18s ease}
+    .langs a:hover,.langs a:focus-visible{border-color:var(--mag);transform:translateY(-2px)}
+    .langs b{display:block;font-family:var(--font-d);font-size:1.4rem;
+             letter-spacing:.02em;text-transform:uppercase}
+    .langs span{display:block;margin-top:6px;font-size:.9rem;line-height:1.5;color:var(--muted)}
+    .foot{margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line);
+          font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#5E5468}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="brand">USGAME <span class="bdg">GTA VI</span></p>
+    <p class="lede">
+      An independent GTA VI resource — news, guides, character dossiers and system breakdowns
+      for Grand Theft Auto VI. Pick a language below; both editions cover the same stories.
+    </p>
+    <ul class="langs">
+      {LANGS.map((l) => (
+        <li>
+          <a href={l.href} hreflang={l.code} lang={l.code === 'zh' ? 'zh-Hans' : 'en'}>
+            <b>{l.label}</b>
+            <span>{l.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="foot">usgame.net · not affiliated with Rockstar Games · {VERSION}</p>
+  </main>
+</body>
+</html>

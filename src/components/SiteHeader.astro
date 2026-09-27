@@ -1,0 +1,78 @@
+---
+// 外壳页头。原来照抄设计稿 A：导航是锚点、语言切换是按钮 + JS。
+// 现在站里已经有真实栏目与文章路由，所以：
+//   · 导航指向真实栏目页（按当前语言）
+//   · 文字由服务端按当前语言渲染，不再靠 JS 换文本
+//   · 语言切换是真链接，只换 URL 前缀 —— 落到同一篇文章，不会退回首页
+import { SECTIONS, sectionPath, switchLang, t, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const path = Astro.url.pathname;
+
+const nav = [
+  ...SECTIONS.map((s) => ({ k: s.k, href: sectionPath(lang, s.k), text: s[lang] })),
+  { k: "about", href: `/${lang}/about/`, text: t("about", lang) },
+];
+const isCur = (href: string) => path === href || path.startsWith(href);
+---
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href={`/${lang}/`}>USGAME <span class="bdg">GTA VI</span></a>
+
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href} aria-current={isCur(n.href) ? "page" : undefined}>{n.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <button class="icon-btn" id="searchToggle" type="button" aria-expanded="false"
+              aria-controls="searchRow" aria-label={t("search", lang)}>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>
+        </svg>
+      </button>
+
+      <div class="lang" role="group" aria-label={t("language", lang)}>
+        <a href={switchLang(path, "en")} class={lang === "en" ? "on" : undefined}
+           aria-current={lang === "en" ? "true" : undefined} hreflang="en">EN</a>
+        <a href={switchLang(path, "zh")} class={lang === "zh" ? "on" : undefined}
+           aria-current={lang === "zh" ? "true" : undefined} hreflang="zh-Hans">中文</a>
+      </div>
+
+      <button class="icon-btn burger" id="burger" type="button" aria-expanded="false"
+              aria-controls="mobileNav" aria-label={t("menu", lang)}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hdr-search" id="searchRow" hidden>
+    <div class="wrap">
+      <form class="sform" id="searchForm" role="search" action={`/${lang}/search/`} method="get">
+        <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px">{t("search", lang)}</label>
+        <input id="searchInput" type="search" name="q" placeholder={t("searchPh", lang)}>
+        <button class="sbtn" type="submit">{t("search", lang)}</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mnav" id="mobileNav" hidden>
+    <div class="wrap mnav-in">
+      <nav aria-label="Mobile">
+        <ul>
+          {nav.map((n) => <li><a href={n.href}>{n.text}</a></li>)}
+        </ul>
+      </nav>
+      <div class="lang" role="group" aria-label={t("language", lang)}>
+        <a href={switchLang(path, "en")} class={lang === "en" ? "on" : undefined} hreflang="en">EN</a>
+        <a href={switchLang(path, "zh")} class={lang === "zh" ? "on" : undefined} hreflang="zh-Hans">中文</a>
+      </div>
+    </div>
+  </div>
+</header>

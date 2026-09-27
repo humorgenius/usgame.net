@@ -1,0 +1,70 @@
+---
+// 页脚。设计稿 A 里第一列是 5 条占位文章标题、第三列是「关于/隐私/免责」占位链接 ——
+// 那些页面还不存在，照抄会产生 404。所以这里换成站上真实存在的目标：
+// 第一列 = 最新 5 篇（真文章、真链接），第二列 = 全部 8 个栏目。
+// 合规页已建（隐私/免责/联系），「Site」那一列已加回，全站再没有连不上的链接。
+import { getCollection } from "astro:content";
+import { SECTIONS, articlePath, sectionLabel, switchLang, t, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const path = Astro.url.pathname;
+
+const latest = (await getCollection("articles", ({ data }) => data.lang === lang && !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 5);
+---
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <p class="ftr-brand">USGAME <span class="bdg">GTA VI</span></p>
+        <p class="ftr-tag">{lang === "en" ? "GTA VI news, guides and intel" : "GTA6 新闻 · 攻略 · 情报"}</p>
+      </div>
+
+      <div>
+        <h3>{t("latest", lang)}</h3>
+        <ul>
+          {latest.map((a) => (
+            <li><a href={articlePath(lang, a.data.section, a.data.slug)}>{a.data.title}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3>{lang === "en" ? "Sections" : "全部栏目"}</h3>
+        <ul>
+          {SECTIONS.map((s) => (
+            <li><a href={`/${lang}/${s.k}/`}>{sectionLabel(s.k, lang)}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3>{t("site", lang)}</h3>
+        <ul>
+          <li><a href={`/${lang}/about/`}>{t("about", lang)}</a></li>
+          <li><a href={`/${lang}/privacy/`}>{t("privacy", lang)}</a></li>
+          <li><a href={`/${lang}/disclaimer/`}>{t("disclaimer", lang)}</a></li>
+          <li><a href={`/${lang}/contact/`}>{t("contact", lang)}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr-legal">
+      <span>© 2026 usgame.net</span>
+      <div class="lang push" role="group" aria-label={t("language", lang)}>
+        <a href={switchLang(path, "en")} class={lang === "en" ? "on" : undefined} hreflang="en">EN</a>
+        <a href={switchLang(path, "zh")} class={lang === "zh" ? "on" : undefined} hreflang="zh-Hans">中文</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- 返回顶部：常驻右下角。写在页脚里，是因为 Base 每个页面都渲染页脚 ——
+     一处定义即全站生效；它本身是 fixed 定位，跟页脚在文档里的位置无关。 -->
+<a class="to-top" href="#top">
+  <span>{t("backToTop", lang)}</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6M5 13l7-7 7 7"/></svg>
+</a>
+

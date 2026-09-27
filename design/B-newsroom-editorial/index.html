@@ -1,0 +1,1121 @@
+<!doctype html>
+<!--
+STANCE: the homepage as the front page of a working desk — lead story, dateline, rail of secondary
+stories, 1px hairlines doing all the separation, nothing decorative.
+STOLEN FROM: IGN / Polygon / VGC section fronts, a printed broadsheet front page, wire-copy discipline.
+TYPE: Playfair Display (Georgia / Constantia fallback) for headlines — a real newspaper face, tight
+leading, roman with one italic word of emphasis; Inter (Segoe UI) for body and UI, metadata at 11-12px
+letterspaced uppercase. Two families, one job each.
+COLOUR: newsprint warmth under a dark theme. Ink #12100E, text #EDE7DE (never #FFF), panel #1A1714.
+One accent only — ink red #E63946 — for category eyebrows, the active tab, hovered links. No glow.
+DETAIL: radius 3px maximum, zero drop shadows, no gradients. Depth comes from hairline rules
+rgba(237,231,222,.14) and whitespace. Density is the point: 12-column grid, small type, tight gutters.
+PROVENANCE: every item carries category · date · Updated stamp — this variant has to be trustworthy
+at a glance, which is the point of it.
+NOT: neon, rounded cards, drop shadows, glassmorphism, a full-bleed cinematic hero, a stats band,
+big decorative numerals, a bento grid, or any second accent colour.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>USGAME — GTA VI news, guides and intel</title>
+<meta name="description" content="GTA VI news, guides and intel. Leonida, region by region — sourced, dated and updated.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9680789453651246" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12100E;
+  --panel:#1A1714;
+  --text:#EDE7DE;
+  --muted:#9E968B;
+  --rule:rgba(237,231,222,.14);
+  --rule-2:rgba(237,231,222,.26);
+  --red:#E63946;
+  --red-dark:#C42E3A;
+  --wrap:76rem;
+  --pad:24px;
+  --gutter:28px;
+  --r:3px;
+  --serif:"Playfair Display",Georgia,Constantia,"Times New Roman",serif;
+  --sans:Inter,"Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;
+}
+html[lang="zh"]{
+  --serif:Georgia,"Songti SC","SimSun","Times New Roman",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ink);color:var(--text);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img,iframe,svg{display:block;max-width:100%}
+img{height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-family:var(--serif);font-weight:700;line-height:1.14;letter-spacing:-.005em;text-align:left}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+figure{margin:0}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:2px}
+::selection{background:var(--red);color:#fff}
+
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--pad)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-64px;z-index:99;background:var(--red);color:#fff;font-size:12px;
+  font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border-radius:var(--r);transition:top .15s}
+.skip:focus{top:12px}
+.sep{color:var(--muted);padding-inline:.35em}
+.soft{color:var(--muted)}
+
+/* ---------- type helpers ---------- */
+.eyebrow{margin:0 0 8px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted)}
+.eyebrow .cat{color:var(--red)}
+.meta{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.prose{overflow-wrap:break-word}
+html[lang="zh"] .prose{text-align:justify;line-height:1.85}
+
+.btn{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;padding:12px 18px;border:1px solid var(--rule-2);border-radius:var(--r);
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+.btn svg{width:14px;height:14px;flex:none}
+.btn:hover{background:var(--red);border-color:var(--red);color:#fff}
+.btn-primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-dark);border-color:var(--red-dark)}
+
+/* ---------- masthead ---------- */
+.masthead{position:sticky;top:0;z-index:40;background:var(--ink);border-bottom:1px solid var(--rule)}
+.mast-top{display:flex;align-items:center;gap:18px;padding-block:13px}
+.brand{display:inline-flex;align-items:baseline;gap:10px}
+.wordmark{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1;letter-spacing:.02em}
+.badge{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);
+  border:1px solid var(--red);border-radius:2px;padding:3px 6px;line-height:1}
+.dateline{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.live{width:6px;height:6px;border-radius:50%;background:var(--red);flex:none}
+.mast-tools{display:flex;align-items:center;gap:10px}
+.lang{font-size:11.5px;font-weight:600;letter-spacing:.08em;padding:7px 11px;border:1px solid var(--rule-2);
+  border-radius:var(--r);transition:border-color .18s ease,color .18s ease,background-color .18s ease}
+.lang:hover{border-color:var(--red);color:var(--red)}
+.burger{display:none;width:40px;height:38px;align-items:center;justify-content:center;
+  border:1px solid var(--rule-2);border-radius:var(--r);transition:border-color .18s ease}
+.burger:hover{border-color:var(--red)}
+.burger svg{width:18px;height:18px}
+.mast-nav{display:flex;flex-wrap:wrap;gap:6px 22px;padding-block:11px;border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);font-size:12.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.mast-nav a{position:relative;padding-block:3px;color:var(--text);transition:color .16s ease}
+.mast-nav a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--red);
+  transform:scaleX(0);transform-origin:left;transition:transform .2s ease}
+.mast-nav a:hover{color:var(--red)}
+.mast-nav a:hover::after{transform:scaleX(1)}
+.mast-nav a[aria-current="page"]{color:var(--red)}
+.mast-row3{display:flex;align-items:center;gap:24px;padding-block:9px}
+.subnav{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:11px;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted)}
+.subnav a{transition:color .16s ease}
+.subnav a:hover{color:var(--red)}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--rule);
+  border-radius:var(--r);padding:6px 10px;min-width:236px;transition:border-color .18s ease}
+.search:focus-within{border-color:var(--red)}
+.search svg{width:14px;height:14px;color:var(--muted);flex:none}
+.search input{width:100%;background:none;border:0;color:var(--text);font-family:var(--sans);font-size:12.5px;
+  letter-spacing:.02em;padding:0}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none}
+.drawer{display:none}
+.drawer.open{display:block;border-top:1px solid var(--rule);padding-block:14px 20px}
+.drawer .d-nav{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;font-size:13px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase}
+.drawer .d-nav a{padding-block:8px;border-bottom:1px solid var(--rule);transition:color .16s ease}
+.drawer .d-nav a:hover{color:var(--red)}
+.drawer .d-sub{margin-top:16px;display:grid;gap:6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.drawer .d-sub a{padding-block:5px}
+.drawer .search{margin:16px 0 0;min-width:0;max-width:none}
+.drawer .lang{margin-top:14px}
+
+/* ---------- ads ---------- */
+.ad{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;
+  border:1px dashed var(--rule-2);border-radius:var(--r);padding:14px;background:transparent}
+.ad-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.ad-size{font-size:10.5px;letter-spacing:.06em;color:var(--muted);opacity:.8}
+.ad--leader{min-height:96px;margin-block:22px 8px}
+.ad--infeed{min-height:220px;align-self:stretch}
+.ad--side{min-height:250px}
+.ad-band--end{padding-block:34px 0}
+.ad--bottom{min-height:110px}
+
+/* ---------- lead story ---------- */
+.lead{padding-block:26px 34px}
+.lead-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:start;
+  border-bottom:1px solid var(--rule);padding-bottom:30px}
+.lead-title{font-size:clamp(1.85rem,3.6vw,3rem);line-height:1.06;margin-bottom:16px}
+.lead-title em{font-style:italic;color:var(--red)}
+.deck{font-size:clamp(1rem,1.28vw,1.14rem);line-height:1.65;color:#DCD5CB;max-width:56ch}
+.byline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:20px 0 22px;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.byline .who{color:var(--text)}
+.lead-fig img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:2px;background:var(--panel)}
+.lead-fig figcaption{margin-top:9px;font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
+
+/* ---------- section heads ---------- */
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:22px}
+.sec-head--plain{border-bottom:0;padding-bottom:0;margin-bottom:14px}
+.sec-title{font-size:clamp(1.35rem,2.2vw,1.75rem);line-height:1.1}
+.sec-more{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:color .16s ease}
+.sec-more svg{width:13px;height:13px}
+.sec-more:hover{color:var(--red)}
+.section{scroll-margin-top:150px}
+
+/* ---------- rail ---------- */
+.tabs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 20px;padding-bottom:12px}
+.tab{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding:6px 0;transition:color .16s ease}
+.tab::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red);
+  transform:scaleX(0);transform-origin:left;transition:transform .2s ease}
+.tab:hover{color:var(--text)}
+.tab[aria-pressed="true"]{color:var(--red)}
+.tab[aria-pressed="true"]::after{transform:scaleX(1)}
+.count{margin-left:auto;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gutter);align-items:start}
+.rail-item{border-top:1px solid var(--rule);padding-top:16px}
+.rail-link{display:block}
+.thumb{border-radius:2px;overflow:hidden;background:var(--panel);margin-bottom:14px}
+.thumb img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:2px;
+  transition:opacity .2s ease,transform .35s cubic-bezier(.22,.61,.36,1)}
+.rail-title{font-size:clamp(1.02rem,1.35vw,1.22rem);line-height:1.2;transition:color .16s ease}
+.rail-title:hover{color:var(--red)}
+.rail-excerpt{margin-top:9px;font-size:14.5px;line-height:1.55;color:#CFC8BE}
+.rail-item .meta{padding-top:11px;margin-top:12px;border-top:1px solid var(--rule)}
+.rail-link:hover .rail-title{color:var(--red)}
+.rail-link:hover .thumb img{transform:scale(1.03);opacity:.92}
+
+/* ---------- desk (main + sticky aside in one wrapper grid) ---------- */
+.desk{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:0 48px;
+  padding-block:40px 8px;border-top:1px solid var(--rule);margin-top:38px}
+.desk-main{min-width:0}
+.desk-aside{min-width:0;align-self:start;position:sticky;top:124px;
+  max-height:calc(100vh - 150px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.desk-block{padding-bottom:26px;margin-bottom:26px;border-bottom:1px solid var(--rule)}
+.desk-block:last-child{border-bottom:0;margin-bottom:0}
+
+/* video */
+.video-card{border-top:1px solid var(--rule);padding-top:16px}
+.ratio{position:relative;aspect-ratio:16/9;background:#000;border-radius:2px;overflow:hidden}
+.ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-cap{margin-top:12px;font-family:var(--serif);font-size:15px;font-style:italic}
+.video-note{margin-top:6px;font-size:11.5px;line-height:1.6;color:var(--muted);letter-spacing:.02em}
+.channel{margin-top:22px;border-top:1px solid var(--rule);padding-top:14px}
+.channel-head{font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.channel-list li+li{border-top:1px solid var(--rule)}
+.channel-list a{display:flex;align-items:baseline;gap:14px;padding-block:9px;transition:color .16s ease}
+.channel-list a:hover{color:var(--red)}
+.ch-t{font-size:13.5px}
+.ch-d{margin-left:auto;font-size:11px;letter-spacing:.1em;color:var(--muted);flex:none}
+
+/* guide index */
+.gi-list{border-top:1px solid var(--rule)}
+.gi-item{border-bottom:1px solid var(--rule)}
+.gi-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:baseline;
+  padding:13px 0 13px 12px;border-left:2px solid transparent;
+  transition:border-color .18s ease,background-color .18s ease}
+.gi-row:hover{border-left-color:var(--red);background:rgba(230,57,70,.05)}
+.gi-num{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+.gi-row:hover .gi-num{color:var(--red)}
+.gi-title{display:block;font-family:var(--serif);font-weight:600;font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.25}
+.gi-meta{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+/* faq */
+.faq-list{border-top:1px solid var(--rule)}
+.faq-item{border-bottom:1px solid var(--rule)}
+.faq-h3{font-family:var(--sans);font-size:1rem;line-height:1.4}
+.faq-q{display:flex;width:100%;align-items:center;gap:16px;text-align:left;padding:15px 0 15px 12px;
+  border-left:2px solid transparent;font-family:var(--serif);font-weight:600;
+  font-size:clamp(1rem,1.4vw,1.18rem);transition:border-color .18s ease,color .16s ease}
+.faq-q:hover{border-left-color:var(--red);color:var(--red)}
+.faq-q[aria-expanded="true"]{border-left-color:var(--red)}
+.faq-sign{margin-left:auto;flex:none;width:15px;height:15px;transition:transform .22s ease}
+.faq-q[aria-expanded="true"] .faq-sign{transform:rotate(45deg)}
+.faq-a{padding:0 0 18px 12px;max-width:66ch}
+.faq-a li{position:relative;padding-left:15px}
+.faq-a p{font-size:14.5px;line-height:1.7;color:#CFC8BE}
+
+/* aside blocks */
+.side-title{font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding-bottom:9px;margin-bottom:12px;border-bottom:2px solid var(--red)}
+.mr-list li+li{border-top:1px solid var(--rule)}
+.mr-list a{display:flex;gap:12px;padding-block:10px;transition:color .16s ease}
+.mr-list a:hover{color:var(--red)}
+.mr-num{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--red);flex:none;width:24px}
+.mr-t{font-size:14px;line-height:1.35;font-family:var(--serif);font-weight:600}
+.log li{display:flex;gap:12px;padding-block:9px;border-bottom:1px solid var(--rule)}
+.log li:last-child{border-bottom:0}
+.log-time{font-size:11px;letter-spacing:.08em;color:var(--red);flex:none;width:58px}
+.log-t{font-size:13px;line-height:1.45;color:#CFC8BE}
+.side-sub .sub-body{font-size:13.5px;line-height:1.6;color:#CFC8BE;margin-bottom:12px}
+.sub-form{display:flex;gap:8px;flex-wrap:wrap}
+.sub-form input{flex:1 1 150px;min-width:0;background:var(--panel);border:1px solid var(--rule);color:var(--text);
+  border-radius:var(--r);padding:10px 12px;font-family:var(--sans);font-size:13px}
+.sub-form input::placeholder{color:var(--muted)}
+.sub-form input:focus{outline:none;border-color:var(--red)}
+.sub-note{margin-top:10px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- footer ---------- */
+.foot{margin-top:44px;border-top:1px solid var(--rule-2);background:var(--panel)}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px;padding-block:36px 28px}
+.foot-wordmark{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:.02em;margin-bottom:10px}
+.foot-blurb{font-size:12.5px;line-height:1.7;color:var(--muted);max-width:38ch}
+.foot-h{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);padding-bottom:9px;margin-bottom:11px;border-bottom:1px solid var(--rule)}
+.foot-col li{padding-block:5px}
+.foot-col a{font-size:13.5px;line-height:1.45;transition:color .16s ease}
+.foot-col a:hover{color:var(--red)}
+.foot-legal{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding-block:16px;
+  border-top:1px solid var(--rule);font-size:11.5px;letter-spacing:.05em;color:var(--muted)}
+.to-top{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:7px;transition:color .16s ease}
+.to-top:hover{color:var(--red)}
+.to-top svg{width:12px;height:12px}
+.foot-lang{margin-top:12px}
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference){
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .lead-copy,.rail-item,.gi-item,.side-block,.faq-item{animation:rise .5s ease both}
+  .rail-item:nth-child(2){animation-delay:.05s}
+  .rail-item:nth-child(3){animation-delay:.1s}
+  .rail-item:nth-child(4){animation-delay:.15s}
+  .rail-item:nth-child(5){animation-delay:.2s}
+  .gi-item:nth-child(2){animation-delay:.04s}
+  .gi-item:nth-child(3){animation-delay:.08s}
+  .gi-item:nth-child(4){animation-delay:.12s}
+  .gi-item:nth-child(5){animation-delay:.16s}
+  .gi-item:nth-child(6){animation-delay:.2s}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- breakpoints ---------- */
+@media (max-width:1180px){
+  .mast-row3{gap:16px}
+  .search{min-width:190px}
+}
+@media (max-width:1000px){
+  .desk{grid-template-columns:minmax(0,1fr);gap:0}
+  .desk-aside{position:static;max-height:none;overflow:visible;margin-top:34px;
+    border-top:1px solid var(--rule);padding-top:28px}
+  .desk-aside .ad--side{max-width:none}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:28px}
+}
+@media (max-width:900px){
+  .mast-nav,.mast-row3{display:none}
+  .burger{display:inline-flex}
+  .rail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lead-grid{grid-template-columns:minmax(0,1fr);gap:26px}
+  .desk{padding-block:30px 0;margin-top:28px}
+}
+@media (max-width:620px){
+  .rail-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+  .dateline{display:none}
+  .wordmark{font-size:22px}
+  .gi-row{grid-template-columns:32px minmax(0,1fr);gap:10px}
+  .gi-meta{grid-column:2;margin-top:2px}
+  .foot-grid{grid-template-columns:1fr;gap:24px}
+  .foot-legal{flex-direction:column;align-items:flex-start}
+  .to-top{margin-left:0}
+  .count{margin-left:0;flex-basis:100%}
+  .ad--infeed{min-height:180px}
+}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#main" data-i18n="ui.skip">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-top">
+      <a class="brand" href="#top" aria-label="USGAME — GTA VI news, guides and intel">
+        <span class="wordmark">USGAME</span>
+        <span class="badge">GTA VI</span>
+      </a>
+      <p class="dateline">
+        <span class="live" aria-hidden="true"></span>
+        <span data-dateline>Saturday, September 26, 2026</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span data-i18n="ui.dateline">Leonida, USA</span>
+      </p>
+      <div class="mast-tools">
+        <button class="lang" type="button" data-lang-toggle data-i18n-aria="ui.lang_aria" aria-label="Switch language to Chinese">中文</button>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer" data-i18n-aria="ui.menu_aria" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <nav class="mast-nav" aria-label="Primary" data-i18n-aria="ui.primary_aria">
+      <a href="#rail" aria-current="page" data-i18n="nav.news">News</a>
+      <a href="#guides" data-i18n="nav.guides">Guides</a>
+      <a href="#map" data-i18n="nav.map">Map &amp; Collectibles</a>
+      <a href="#characters" data-i18n="nav.characters">Characters</a>
+      <a href="#vehicles" data-i18n="nav.vehicles">Vehicles</a>
+      <a href="#weapons" data-i18n="nav.weapons">Weapons</a>
+      <a href="#video" data-i18n="nav.videos">Videos</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+    </nav>
+
+    <div class="mast-row3">
+      <nav class="subnav" aria-label="Sections" data-i18n-aria="ui.sections_aria">
+        <a href="#map" data-i18n="quick.0" data-i18n-title="quick.0.sub" title="Districts, shops, hideouts">Interactive map</a>
+        <a href="#map" data-i18n="quick.1" data-i18n-title="quick.1.sub" title="142 tracked items">Collectibles</a>
+        <a href="#characters" data-i18n="quick.2" data-i18n-title="quick.2.sub" title="Cast, factions, gangs">Characters</a>
+        <a href="#vehicles" data-i18n="quick.3" data-i18n-title="quick.3.sub" title="Cars, bikes, boats, air">Vehicle index</a>
+        <a href="#weapons" data-i18n="quick.4" data-i18n-title="quick.4.sub" title="Stats, mods, where to find">Weapon index</a>
+        <a href="#video" data-i18n="quick.5" data-i18n-title="quick.5.sub" title="Frame by frame">Trailer breakdowns</a>
+        <a href="#about" data-i18n="quick.6" data-i18n-title="quick.6.sub" title="Patches and hotfixes">Update log</a>
+        <a href="#faq" data-i18n="quick.7" data-i18n-title="quick.7.sub" title="30 answers, sourced">FAQ</a>
+      </nav>
+      <form class="search" role="search" action="#" data-search-form>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>
+        </svg>
+        <label class="sr-only" for="q-desktop" data-i18n="ui.search_aria">Search usgame.net</label>
+        <input id="q-desktop" type="search" placeholder="Search news, guides, weapons…" data-i18n-ph="ui.search_ph">
+      </form>
+    </div>
+
+    <div class="drawer" id="drawer">
+      <nav class="d-nav" aria-label="Mobile primary" data-i18n-aria="ui.primary_aria">
+        <a href="#rail" data-i18n="nav.news">News</a>
+        <a href="#guides" data-i18n="nav.guides">Guides</a>
+        <a href="#map" data-i18n="nav.map">Map &amp; Collectibles</a>
+        <a href="#characters" data-i18n="nav.characters">Characters</a>
+        <a href="#vehicles" data-i18n="nav.vehicles">Vehicles</a>
+        <a href="#weapons" data-i18n="nav.weapons">Weapons</a>
+        <a href="#video" data-i18n="nav.videos">Videos</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </nav>
+      <div class="d-sub">
+        <a href="#map" data-i18n="quick.0">Interactive map</a>
+        <a href="#map" data-i18n="quick.1">Collectibles</a>
+        <a href="#characters" data-i18n="quick.2">Characters</a>
+        <a href="#video" data-i18n="quick.5">Trailer breakdowns</a>
+        <a href="#about" data-i18n="nav.about">About</a>
+      </div>
+      <form class="search" role="search" action="#" data-search-form>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>
+        </svg>
+        <label class="sr-only" for="q-mobile" data-i18n="ui.search_aria">Search usgame.net</label>
+        <input id="q-mobile" type="search" placeholder="Search news, guides, weapons…" data-i18n-ph="ui.search_ph">
+      </form>
+      <button class="lang" type="button" data-lang-toggle data-i18n-aria="ui.lang_aria" aria-label="Switch language to Chinese">中文</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <aside class="ad ad--leader" aria-label="Advertisement" data-i18n-aria="ad.aria">
+      <span class="ad-label" data-i18n="ad.label">Advertisement</span>
+      <span class="ad-size" data-i18n="ad.top">728×90 / 970×250 — below nav</span>
+    </aside>
+  </div>
+
+  <section class="wrap lead section" id="news" aria-labelledby="lead-h">
+    <div class="lead-grid">
+      <div class="lead-copy">
+        <p class="eyebrow">
+          <span class="cat" data-i18n="news.0.cat">News</span>
+          <span class="sep" aria-hidden="true">·</span>
+          <span>2026-09-24</span>
+          <span class="sep" aria-hidden="true">·</span>
+          <span><span data-i18n="ui.updated">Updated</span> 09:40</span>
+        </p>
+        <h1 class="lead-title prose" id="lead-h" data-i18n="news.0.title">GTA VI release date explained: everything pointing at November 19, 2026</h1>
+        <p class="deck prose" data-i18n="news.0.excerpt">Take-Two has moved the date twice. Here is the full timeline, what the delay actually cost, and why November 19 is the number that survived.</p>
+        <p class="byline">
+          <span class="who" data-i18n="ui.byline">By the USGAME desk</span>
+          <span class="sep" aria-hidden="true">·</span>
+          <span>3 <span data-i18n="ui.min_read">min read</span></span>
+        </p>
+        <a class="btn btn-primary" href="#rail">
+          <span data-i18n="ui.read_full">Read the full story</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+      </div>
+      <figure class="lead-fig">
+        <img src="../assets/img/scene-boxart.webp" width="1200" height="674" loading="eager" fetchpriority="high" decoding="async"
+             alt="GTA VI official key art for the release-date story">
+        <figcaption data-i18n="ui.caption_lead">Key art · Rockstar Games</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wrap section" id="rail" aria-labelledby="rail-h">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow"><span class="cat" data-i18n="sec.front_k">Front page</span></p>
+        <h2 class="sec-title" id="rail-h" data-i18n="sec.latest">Latest news</h2>
+      </div>
+      <a class="sec-more" href="#rail">
+        <span data-i18n="ui.view_all_news">All news</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="tabs" role="group" aria-label="Filter stories by category" data-i18n-aria="ui.tab_aria">
+      <button class="tab" type="button" data-filter="all" aria-pressed="true" data-i18n="ui.all">All</button>
+      <button class="tab" type="button" data-filter="news" aria-pressed="false" data-i18n="nav.news">News</button>
+      <button class="tab" type="button" data-filter="guides" aria-pressed="false" data-i18n="nav.guides">Guides</button>
+      <button class="tab" type="button" data-filter="map" aria-pressed="false" data-i18n="ui.tab_map">Map</button>
+      <button class="tab" type="button" data-filter="characters" aria-pressed="false" data-i18n="ui.tab_characters">Characters</button>
+      <p class="count" aria-live="polite" data-count>Showing 5 of 5 stories</p>
+    </div>
+
+    <div class="rail-grid" id="railGrid">
+      <article class="rail-item" data-cat="news">
+        <a class="rail-link" href="#rail">
+          <div class="thumb">
+            <img src="../assets/img/hero-neon-night.webp" width="1600" height="900" loading="lazy" decoding="async"
+                 alt="GTA VI artwork: Vice City at night in neon">
+          </div>
+          <p class="eyebrow"><span class="cat" data-i18n="news.1.cat">News</span></p>
+          <h3 class="rail-title prose" data-i18n="news.1.title">Every official Rockstar announcement so far, in one timeline</h3>
+          <p class="rail-excerpt prose" data-i18n="news.1.excerpt">From the 2022 leak to the Extended Look: dated, sourced, and separated from the rumour pile.</p>
+        </a>
+        <p class="meta">2026-09-22 <span class="sep" aria-hidden="true">·</span> <span data-i18n="ui.updated">Updated</span> 14:10</p>
+      </article>
+
+      <article class="rail-item" data-cat="map">
+        <a class="rail-link" href="#rail">
+          <div class="thumb">
+            <img src="../assets/img/scene-keys.webp" width="1200" height="675" loading="lazy" decoding="async"
+                 alt="GTA VI artwork: the Florida Keys scene">
+          </div>
+          <p class="eyebrow"><span class="cat" data-i18n="news.2.cat">Map</span></p>
+          <h3 class="rail-title prose" data-i18n="news.2.title">Leonida, region by region: the full map breakdown</h3>
+          <p class="rail-excerpt prose" data-i18n="news.2.excerpt">Vice City's six districts, the Keys, Grassrivers and Ambrosia — what each area is for and what it hides.</p>
+        </a>
+        <p class="meta">2026-09-20 <span class="sep" aria-hidden="true">·</span> <span data-i18n="ui.updated">Updated</span> 11:05</p>
+      </article>
+
+      <article class="rail-item" data-cat="guides">
+        <a class="rail-link" href="#rail">
+          <div class="thumb">
+            <img src="../assets/img/scene-moody.webp" width="1200" height="675" loading="lazy" decoding="async"
+                 alt="GTA VI artwork: a moody night scene">
+          </div>
+          <p class="eyebrow"><span class="cat" data-i18n="news.3.cat">Guides</span></p>
+          <h3 class="rail-title prose" data-i18n="news.3.title">Six stars are back: how the new wanted system actually works</h3>
+          <p class="rail-excerpt prose" data-i18n="news.3.excerpt">Witnesses, licence plates and a police force that remembers you. Escaping is a route problem now, not a speed problem.</p>
+        </a>
+        <p class="meta">2026-09-19 <span class="sep" aria-hidden="true">·</span> <span data-i18n="ui.updated">Updated</span> 08:20</p>
+      </article>
+
+      <article class="rail-item" data-cat="guides">
+        <a class="rail-link" href="#rail">
+          <div class="thumb">
+            <img src="../assets/img/scene-car-night.webp" width="1200" height="675" loading="lazy" decoding="async"
+                 alt="GTA VI artwork: a car on a city street at night">
+          </div>
+          <p class="eyebrow"><span class="cat" data-i18n="news.4.cat">Guides</span></p>
+          <h3 class="rail-title prose" data-i18n="news.4.title">Vehicle system deep dive: physics, tuning and the new handling model</h3>
+          <p class="rail-excerpt prose" data-i18n="news.4.excerpt">Weight transfer, tyre wear and per-panel damage — what changed from GTA V and what it means for a getaway.</p>
+        </a>
+        <p class="meta">2026-09-18 <span class="sep" aria-hidden="true">·</span> <span data-i18n="ui.updated">Updated</span> 17:45</p>
+      </article>
+
+      <article class="rail-item" data-cat="characters">
+        <a class="rail-link" href="#rail">
+          <div class="thumb">
+            <img src="../assets/img/scene-pool.webp" width="1200" height="675" loading="lazy" decoding="async"
+                 alt="GTA VI artwork: a poolside scene in Leonida">
+          </div>
+          <p class="eyebrow"><span class="cat" data-i18n="news.5.cat">Characters</span></p>
+          <h3 class="rail-title prose" data-i18n="news.5.title">The full cast list: every character Rockstar has put a name to</h3>
+          <p class="rail-excerpt prose" data-i18n="news.5.excerpt">Lucia, Jason, Boobie Ike, Brian Heder, Raul Bautista and the rest of Leonida's bad company.</p>
+        </a>
+        <p class="meta">2026-09-16 <span class="sep" aria-hidden="true">·</span> <span data-i18n="ui.updated">Updated</span> 12:30</p>
+      </article>
+
+      <aside class="ad ad--infeed" aria-label="Advertisement" data-i18n-aria="ad.aria">
+        <span class="ad-label" data-i18n="ad.label">Advertisement</span>
+        <span class="ad-size" data-i18n="ad.infeed">in-feed — every 4th news card</span>
+      </aside>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="desk">
+      <div class="desk-main">
+        <section class="section" id="video" aria-labelledby="vid-h">
+          <div class="sec-head">
+            <div>
+              <p class="eyebrow"><span class="cat" data-i18n="sec.video_k">Video</span></p>
+              <h2 class="sec-title" id="vid-h" data-i18n="sec.video">Official video</h2>
+            </div>
+            <span class="count" data-i18n="sec.video_meta">Trailer 2 · May 2025 · 2:07</span>
+          </div>
+          <figure class="video-card">
+            <div class="ratio">
+              <iframe src="https://www.youtube-nocookie.com/embed/VQRLujxTm3c?si=BV4Rlx2bLlOjeuQU&amp;start=3"
+                      title="GTA 6 Official Trailer" loading="lazy" allowfullscreen
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            </div>
+            <figcaption>
+              <p class="video-cap" data-i18n="trailer.caption">Trailer 2 — Rockstar Games, official</p>
+              <p class="video-note" data-i18n="trailer.note">Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel.</p>
+            </figcaption>
+          </figure>
+          <div class="channel">
+            <p class="channel-head" data-i18n="trailer.more">More from the channel</p>
+            <ul class="channel-list">
+              <li><a href="#video"><span class="ch-t" data-i18n="video.0">Trailer 1 — official, December 2023</span><span class="ch-d">1:31</span></a></li>
+              <li><a href="#video"><span class="ch-t" data-i18n="video.1">Trailer 2 — official, May 2025</span><span class="ch-d">2:07</span></a></li>
+              <li><a href="#video"><span class="ch-t" data-i18n="video.2">Extended Look — what changed</span><span class="ch-d">4:12</span></a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="guides" aria-labelledby="guides-h" style="margin-top:40px">
+          <div class="sec-head">
+            <div>
+              <p class="eyebrow"><span class="cat" data-i18n="sec.guides_k">Index</span></p>
+              <h2 class="sec-title" id="guides-h" data-i18n="sec.guides">Day one guides</h2>
+            </div>
+            <a class="sec-more" href="#guides">
+              <span data-i18n="ui.view_all_guides">All guides</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <ol class="gi-list">
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">01</span>
+                <span><span class="gi-title prose" data-i18n="guides.0.title">First three hours: a spoiler-free starting route</span></span>
+                <span class="gi-meta"><span data-i18n="guides.0.kind">Walkthrough</span> <span class="sep" aria-hidden="true">·</span> 12 min</span>
+              </a>
+            </li>
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">02</span>
+                <span><span class="gi-title prose" data-i18n="guides.1.title">Robbery planning: how every heist is built</span></span>
+                <span class="gi-meta"><span data-i18n="guides.1.kind">Systems</span> <span class="sep" aria-hidden="true">·</span> 9 min</span>
+              </a>
+            </li>
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">03</span>
+                <span><span class="gi-title prose" data-i18n="guides.2.title">Collectibles and buried treasure, mapped</span></span>
+                <span class="gi-meta"><span data-i18n="guides.2.kind">Collectibles</span> <span class="sep" aria-hidden="true">·</span> 18 min</span>
+              </a>
+            </li>
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">04</span>
+                <span><span class="gi-title prose" data-i18n="guides.3.title">Money early: businesses, safehouses and cash flow</span></span>
+                <span class="gi-meta"><span data-i18n="guides.3.kind">Economy</span> <span class="sep" aria-hidden="true">·</span> 11 min</span>
+              </a>
+            </li>
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">05</span>
+                <span><span class="gi-title prose" data-i18n="guides.4.title">Hunting and fishing without losing a day</span></span>
+                <span class="gi-meta"><span data-i18n="guides.4.kind">Activities</span> <span class="sep" aria-hidden="true">·</span> 7 min</span>
+              </a>
+            </li>
+            <li class="gi-item">
+              <a class="gi-row" href="#guides">
+                <span class="gi-num">06</span>
+                <span><span class="gi-title prose" data-i18n="guides.5.title">Flying in Leonida: every aircraft and where to steal it</span></span>
+                <span class="gi-meta"><span data-i18n="guides.5.kind">Vehicles</span> <span class="sep" aria-hidden="true">·</span> 14 min</span>
+              </a>
+            </li>
+          </ol>
+        </section>
+
+        <section class="section" id="faq" aria-labelledby="faq-h" style="margin-top:40px">
+          <div class="sec-head">
+            <div>
+              <p class="eyebrow"><span class="cat" data-i18n="sec.faq_k">FAQ</span></p>
+              <h2 class="sec-title" id="faq-h" data-i18n="sec.faq">Questions we keep answering</h2>
+            </div>
+          </div>
+          <ul class="faq-list">
+            <li class="faq-item">
+              <h3 class="faq-h3">
+                <button class="faq-q" type="button" id="faq-b0" aria-expanded="true" aria-controls="faq-p0">
+                  <span data-i18n="faq.0.q">When does GTA VI come out?</span>
+                  <svg class="faq-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </h3>
+              <div class="faq-a prose" id="faq-p0" role="region" aria-labelledby="faq-b0">
+                <p data-i18n="faq.0.a">November 19, 2026. Take-Two has moved the window twice; the full timeline, and what each delay cost, is in the release-date story above.</p>
+              </div>
+            </li>
+            <li class="faq-item">
+              <h3 class="faq-h3">
+                <button class="faq-q" type="button" id="faq-b1" aria-expanded="false" aria-controls="faq-p1">
+                  <span data-i18n="faq.1.q">Which platforms are confirmed?</span>
+                  <svg class="faq-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </h3>
+              <div class="faq-a prose" id="faq-p1" role="region" aria-labelledby="faq-b1" hidden>
+                <p data-i18n="faq.1.a">PlayStation 5 and Xbox Series X|S. Rockstar has named those two and nothing else.</p>
+              </div>
+            </li>
+            <li class="faq-item">
+              <h3 class="faq-h3">
+                <button class="faq-q" type="button" id="faq-b2" aria-expanded="false" aria-controls="faq-p2">
+                  <span data-i18n="faq.2.q">How much of Leonida is mapped already?</span>
+                  <svg class="faq-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </h3>
+              <div class="faq-a prose" id="faq-p2" role="region" aria-labelledby="faq-b2" hidden>
+                <p data-i18n="faq.2.a">Four regions: Vice City, the Keys, Grassrivers and Ambrosia — plus 142 collectibles tracked on the interactive map.</p>
+              </div>
+            </li>
+            <li class="faq-item">
+              <h3 class="faq-h3">
+                <button class="faq-q" type="button" id="faq-b3" aria-expanded="false" aria-controls="faq-p3">
+                  <span data-i18n="faq.3.q">Are the guides spoiler-free?</span>
+                  <svg class="faq-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </h3>
+              <div class="faq-a prose" id="faq-p3" role="region" aria-labelledby="faq-b3" hidden>
+                <p data-i18n="faq.3.a">The walkthrough keeps story beats out of the route. Any page that touches a plot point says so in its first line.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <aside class="desk-aside" aria-label="Sidebar" data-i18n-aria="aside.aria">
+        <section class="desk-block side-block">
+          <h2 class="side-title" data-i18n="aside.most_read">Most read</h2>
+          <ol class="mr-list">
+            <li><a href="#news"><span class="mr-num">01</span><span class="mr-t prose" data-i18n="news.0.title">GTA VI release date explained: everything pointing at November 19, 2026</span></a></li>
+            <li><a href="#rail"><span class="mr-num">02</span><span class="mr-t prose" data-i18n="news.5.title">The full cast list: every character Rockstar has put a name to</span></a></li>
+            <li><a href="#rail"><span class="mr-num">03</span><span class="mr-t prose" data-i18n="news.2.title">Leonida, region by region: the full map breakdown</span></a></li>
+            <li><a href="#rail"><span class="mr-num">04</span><span class="mr-t prose" data-i18n="news.4.title">Vehicle system deep dive: physics, tuning and the new handling model</span></a></li>
+            <li><a href="#rail"><span class="mr-num">05</span><span class="mr-t prose" data-i18n="news.3.title">Six stars are back: how the new wanted system actually works</span></a></li>
+          </ol>
+        </section>
+
+        <section class="desk-block side-block">
+          <h2 class="side-title" data-i18n="aside.updates">Latest updates</h2>
+          <ul class="log">
+            <li><span class="log-time">09:40</span><span class="log-t" data-i18n="log.0">Release date: November 19, 2026 — timeline rebuilt</span></li>
+            <li><span class="log-time">08:15</span><span class="log-t" data-i18n="log.1">Trailer 2 passes 93M+ views</span></li>
+            <li><span class="log-time">Mon</span><span class="log-t" data-i18n="log.2">Leonida map: 4 regions indexed, page by page</span></li>
+            <li><span class="log-time">Sat</span><span class="log-t" data-i18n="log.3">Collectibles tracker at 142 items</span></li>
+          </ul>
+        </section>
+
+        <section class="desk-block">
+          <aside class="ad ad--side" aria-label="Advertisement" data-i18n-aria="ad.aria">
+            <span class="ad-label" data-i18n="ad.label">Advertisement</span>
+            <span class="ad-size" data-i18n="ad.sidebar">300×250 / 300×600 — sidebar</span>
+          </aside>
+        </section>
+
+        <section class="desk-block side-block side-sub">
+          <h2 class="side-title" data-i18n="aside.subscribe">Subscribe</h2>
+          <p class="sub-body" data-i18n="foot.newsletter">Get one email when a trailer or a big patch drops. No spam, unsubscribe anytime.</p>
+          <form class="sub-form" action="#" data-search-form>
+            <label class="sr-only" for="sub-email" data-i18n="ui.email_aria">Email address</label>
+            <input id="sub-email" type="email" placeholder="you@example.com" data-i18n-ph="foot.email_ph">
+            <button class="btn" type="submit" data-i18n="foot.subscribe">Notify me</button>
+          </form>
+          <p class="sub-note" data-i18n="ui.not_wired">Front-end only — not wired up yet</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div class="wrap ad-band--end">
+    <aside class="ad ad--bottom" aria-label="Advertisement" data-i18n-aria="ad.aria">
+      <span class="ad-label" data-i18n="ad.label">Advertisement</span>
+      <span class="ad-size" data-i18n="ad.bottom">336×280 / 728×90 — end of content</span>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot" id="about">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-wordmark">USGAME</p>
+        <p class="foot-blurb" data-i18n="foot.blurb">USGAME is an independent fan resource. Grand Theft Auto and all related marks are trademarks of Take-Two Interactive. We are not affiliated with Rockstar Games.</p>
+      </div>
+      <nav class="foot-col" aria-labelledby="f-guides">
+        <h2 class="foot-h" id="f-guides" data-i18n="foot.col_guides">Guides</h2>
+        <ul>
+          <li><a href="#guides" data-i18n="guides.0.title">First three hours: a spoiler-free starting route</a></li>
+          <li><a href="#guides" data-i18n="guides.1.title">Robbery planning: how every heist is built</a></li>
+          <li><a href="#guides" data-i18n="guides.2.title">Collectibles and buried treasure, mapped</a></li>
+          <li><a href="#guides" data-i18n="guides.3.title">Money early: businesses, safehouses and cash flow</a></li>
+          <li><a href="#guides" data-i18n="guides.4.title">Hunting and fishing without losing a day</a></li>
+          <li><a href="#guides" data-i18n="guides.5.title">Flying in Leonida: every aircraft and where to steal it</a></li>
+        </ul>
+      </nav>
+      <nav class="foot-col" aria-labelledby="f-site">
+        <h2 class="foot-h" id="f-site" data-i18n="foot.col_site">Site</h2>
+        <ul>
+          <li><a href="#about" data-i18n="foot.link0">About</a></li>
+          <li><a href="#about" data-i18n="foot.link1">Contact</a></li>
+          <li><a href="#about" data-i18n="foot.link2">Privacy policy</a></li>
+          <li><a href="#about" data-i18n="foot.link3">Disclaimer</a></li>
+          <li><a href="#about" data-i18n="foot.link4">Update log</a></li>
+        </ul>
+      </nav>
+      <div class="foot-col">
+        <h2 class="foot-h" data-i18n="foot.lang_label">Language</h2>
+        <p class="foot-blurb" data-i18n="ui.lang_note">The whole page, both languages, one dictionary.</p>
+        <button class="lang foot-lang" type="button" data-lang-toggle data-i18n-aria="ui.lang_aria" aria-label="Switch language to Chinese">中文</button>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <p data-i18n="foot.legal">© 2026 usgame.net — independent GTA VI news, guides and intel.</p>
+      <a class="to-top" href="#top">
+        <span data-i18n="ui.top">Back to top</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var T = {
+    en: {
+      "ui.skip":"Skip to content",
+      "ui.search_ph":"Search news, guides, weapons…",
+      "ui.search_aria":"Search usgame.net",
+      "ui.lang_aria":"Switch language to Chinese",
+      "ui.lang_switch":"中文",
+      "ui.lang_note":"The whole page, both languages, one dictionary.",
+      "ui.menu_aria":"Menu",
+      "ui.primary_aria":"Primary",
+      "ui.sections_aria":"Sections",
+      "ui.read_full":"Read the full story",
+      "ui.read_more":"Read",
+      "ui.all":"All",
+      "ui.updated":"Updated",
+      "ui.min_read":"min read",
+      "ui.breaking":"Breaking",
+      "ui.view_all_news":"All news",
+      "ui.view_all_guides":"All guides",
+      "ui.top":"Back to top",
+      "ui.byline":"By the USGAME desk",
+      "ui.dateline":"Leonida, USA",
+      "ui.caption_lead":"Key art · Rockstar Games",
+      "ui.email_aria":"Email address",
+      "ui.not_wired":"Front-end only — not wired up yet",
+      "ui.tab_aria":"Filter stories by category",
+      "ui.tab_map":"Map",
+      "ui.tab_characters":"Characters",
+      "ui.count":"Showing {n} of 5 stories",
+      "nav.news":"News","nav.guides":"Guides","nav.map":"Map & Collectibles","nav.characters":"Characters",
+      "nav.vehicles":"Vehicles","nav.weapons":"Weapons","nav.videos":"Videos","nav.faq":"FAQ","nav.about":"About",
+      "sec.front_k":"Front page","sec.latest":"Latest news",
+      "sec.video_k":"Video","sec.video":"Official video","sec.video_meta":"Trailer 2 · May 2025 · 2:07",
+      "sec.guides_k":"Index","sec.guides":"Day one guides",
+      "sec.faq_k":"FAQ","sec.faq":"Questions we keep answering",
+      "aside.aria":"Sidebar","aside.most_read":"Most read","aside.updates":"Latest updates","aside.subscribe":"Subscribe",
+      "trailer.more":"More from the channel",
+      "trailer.caption":"Trailer 2 — Rockstar Games, official",
+      "trailer.note":"Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel.",
+      "ad.aria":"Advertisement","ad.label":"Advertisement",
+      "ad.top":"728×90 / 970×250 — below nav",
+      "ad.infeed":"in-feed — every 4th news card",
+      "ad.sidebar":"300×250 / 300×600 — sidebar",
+      "ad.bottom":"336×280 / 728×90 — end of content",
+      "news.0.cat":"News","news.0.title":"GTA VI release date explained: everything pointing at November 19, 2026",
+      "news.0.excerpt":"Take-Two has moved the date twice. Here is the full timeline, what the delay actually cost, and why November 19 is the number that survived.",
+      "news.1.cat":"News","news.1.title":"Every official Rockstar announcement so far, in one timeline",
+      "news.1.excerpt":"From the 2022 leak to the Extended Look: dated, sourced, and separated from the rumour pile.",
+      "news.2.cat":"Map","news.2.title":"Leonida, region by region: the full map breakdown",
+      "news.2.excerpt":"Vice City's six districts, the Keys, Grassrivers and Ambrosia — what each area is for and what it hides.",
+      "news.3.cat":"Guides","news.3.title":"Six stars are back: how the new wanted system actually works",
+      "news.3.excerpt":"Witnesses, licence plates and a police force that remembers you. Escaping is a route problem now, not a speed problem.",
+      "news.4.cat":"Guides","news.4.title":"Vehicle system deep dive: physics, tuning and the new handling model",
+      "news.4.excerpt":"Weight transfer, tyre wear and per-panel damage — what changed from GTA V and what it means for a getaway.",
+      "news.5.cat":"Characters","news.5.title":"The full cast list: every character Rockstar has put a name to",
+      "news.5.excerpt":"Lucia, Jason, Boobie Ike, Brian Heder, Raul Bautista and the rest of Leonida's bad company.",
+      "guides.0.title":"First three hours: a spoiler-free starting route","guides.0.kind":"Walkthrough",
+      "guides.1.title":"Robbery planning: how every heist is built","guides.1.kind":"Systems",
+      "guides.2.title":"Collectibles and buried treasure, mapped","guides.2.kind":"Collectibles",
+      "guides.3.title":"Money early: businesses, safehouses and cash flow","guides.3.kind":"Economy",
+      "guides.4.title":"Hunting and fishing without losing a day","guides.4.kind":"Activities",
+      "guides.5.title":"Flying in Leonida: every aircraft and where to steal it","guides.5.kind":"Vehicles",
+      "quick.0":"Interactive map","quick.0.sub":"Districts, shops, hideouts",
+      "quick.1":"Collectibles","quick.1.sub":"142 tracked items",
+      "quick.2":"Characters","quick.2.sub":"Cast, factions, gangs",
+      "quick.3":"Vehicle index","quick.3.sub":"Cars, bikes, boats, air",
+      "quick.4":"Weapon index","quick.4.sub":"Stats, mods, where to find",
+      "quick.5":"Trailer breakdowns","quick.5.sub":"Frame by frame",
+      "quick.6":"Update log","quick.6.sub":"Patches and hotfixes",
+      "quick.7":"FAQ","quick.7.sub":"30 answers, sourced",
+      "video.0":"Trailer 1 — official, December 2023",
+      "video.1":"Trailer 2 — official, May 2025",
+      "video.2":"Extended Look — what changed",
+      "log.0":"Release date: November 19, 2026 — timeline rebuilt",
+      "log.1":"Trailer 2 passes 93M+ views",
+      "log.2":"Leonida map: 4 regions indexed, page by page",
+      "log.3":"Collectibles tracker at 142 items",
+      "faq.0.q":"When does GTA VI come out?",
+      "faq.0.a":"November 19, 2026. Take-Two has moved the window twice; the full timeline, and what each delay cost, is in the release-date story above.",
+      "faq.1.q":"Which platforms are confirmed?",
+      "faq.1.a":"PlayStation 5 and Xbox Series X|S. Rockstar has named those two and nothing else.",
+      "faq.2.q":"How much of Leonida is mapped already?",
+      "faq.2.a":"Four regions: Vice City, the Keys, Grassrivers and Ambrosia — plus 142 collectibles tracked on the interactive map.",
+      "faq.3.q":"Are the guides spoiler-free?",
+      "faq.3.a":"The walkthrough keeps story beats out of the route. Any page that touches a plot point says so in its first line.",
+      "foot.blurb":"USGAME is an independent fan resource. Grand Theft Auto and all related marks are trademarks of Take-Two Interactive. We are not affiliated with Rockstar Games.",
+      "foot.col_guides":"Guides","foot.col_site":"Site","foot.lang_label":"Language",
+      "foot.link0":"About","foot.link1":"Contact","foot.link2":"Privacy policy","foot.link3":"Disclaimer","foot.link4":"Update log",
+      "foot.newsletter":"Get one email when a trailer or a big patch drops. No spam, unsubscribe anytime.",
+      "foot.email_ph":"you@example.com","foot.subscribe":"Notify me",
+      "foot.legal":"© 2026 usgame.net — independent GTA VI news, guides and intel."
+    },
+    zh: {
+      "ui.skip":"跳到正文",
+      "ui.search_ph":"搜索新闻、攻略、武器…",
+      "ui.search_aria":"搜索 usgame.net",
+      "ui.lang_aria":"切换到英文",
+      "ui.lang_switch":"EN",
+      "ui.lang_note":"整站双语，共用同一份词条。",
+      "ui.menu_aria":"菜单",
+      "ui.primary_aria":"主导航",
+      "ui.sections_aria":"栏目",
+      "ui.read_full":"阅读全文",
+      "ui.read_more":"阅读",
+      "ui.all":"全部",
+      "ui.updated":"更新于",
+      "ui.min_read":"分钟阅读",
+      "ui.breaking":"快讯",
+      "ui.view_all_news":"全部新闻",
+      "ui.view_all_guides":"全部攻略",
+      "ui.top":"返回顶部",
+      "ui.byline":"USGAME 编辑部",
+      "ui.dateline":"雷欧奈达州",
+      "ui.caption_lead":"主视觉 · Rockstar Games",
+      "ui.email_aria":"邮箱地址",
+      "ui.not_wired":"仅前端示意 — 尚未接入",
+      "ui.tab_aria":"按分类筛选报道",
+      "ui.tab_map":"地图",
+      "ui.tab_characters":"角色",
+      "ui.count":"显示 5 篇中的 {n} 篇",
+      "nav.news":"新闻","nav.guides":"攻略","nav.map":"地图 / 收集","nav.characters":"角色 / 剧情",
+      "nav.vehicles":"载具","nav.weapons":"武器","nav.videos":"视频","nav.faq":"FAQ","nav.about":"关于",
+      "sec.front_k":"头版","sec.latest":"最新新闻",
+      "sec.video_k":"视频","sec.video":"官方视频","sec.video_meta":"第二支预告片 · 2025 年 5 月 · 2:07",
+      "sec.guides_k":"索引","sec.guides":"开局攻略",
+      "sec.faq_k":"FAQ","sec.faq":"我们反复回答的问题",
+      "aside.aria":"边栏","aside.most_read":"最多阅读","aside.updates":"最新更新","aside.subscribe":"订阅",
+      "trailer.more":"频道更多内容",
+      "trailer.caption":"第二支预告片 — Rockstar 官方",
+      "trailer.note":"两支官方预告片均使用 youtube-nocookie.com 域名嵌入以保护隐私。若播放器未能加载，请前往 Rockstar 官方频道观看。",
+      "ad.aria":"广告","ad.label":"广告",
+      "ad.top":"728×90 / 970×250 — 导航下方",
+      "ad.infeed":"信息流内 — 每第 4 条新闻",
+      "ad.sidebar":"300×250 / 300×600 — 边栏",
+      "ad.bottom":"336×280 / 728×90 — 正文末尾",
+      "news.0.cat":"新闻","news.0.title":"《GTA6》发售时间全解析：预计2026年11月19日正式上线",
+      "news.0.excerpt":"Take-Two 已经两次调整发售窗口。完整时间线、延期究竟损失了什么，以及为什么最后留下的是 11 月 19 日。",
+      "news.1.cat":"新闻","news.1.title":"《GTA6》Rockstar 官方消息汇总",
+      "news.1.excerpt":"从 2022 年泄露到 Extended Look：逐条标注日期与来源，和传闻堆分开。",
+      "news.2.cat":"地图","news.2.title":"《GTA6》地图介绍：雷欧奈达州全解析",
+      "news.2.excerpt":"罪恶城六大街区、礁岛群、格拉斯河与安布罗西亚——每一区是什么、藏着什么。",
+      "news.3.cat":"攻略","news.3.title":"《GTA6》通缉等级改动：从五星到六星的全面进化",
+      "news.3.excerpt":"目击者、车牌，以及一支会记住你的警察系统。逃跑现在是路线问题，不是速度问题。",
+      "news.4.cat":"攻略","news.4.title":"《GTA6》载具系统详解：物理、改装与全新驾驶体验",
+      "news.4.excerpt":"重心转移、轮胎磨损与逐块车损——相比 GTA5 变了什么，对逃逸意味着什么。",
+      "news.5.cat":"角色","news.5.title":"《GTA6》全部角色背景一览",
+      "news.5.excerpt":"露西亚、杰森、波比·艾克、布莱恩·赫德、拉乌尔·巴蒂斯塔，以及雷欧奈达其余的坏朋友。",
+      "guides.0.title":"开局前三小时：无剧透起手路线","guides.0.kind":"流程",
+      "guides.1.title":"抢劫机制：每一票的行动结构","guides.1.kind":"机制",
+      "guides.2.title":"收集品与海底宝藏全图","guides.2.kind":"收集",
+      "guides.3.title":"前期赚钱：生意、安全屋与现金流","guides.3.kind":"经济",
+      "guides.4.title":"钓鱼与狩猎：不浪费一天时间","guides.4.kind":"活动",
+      "guides.5.title":"雷欧奈达飞行手册：全部飞行器与获取方式","guides.5.kind":"载具",
+      "quick.0":"互动地图","quick.0.sub":"街区、商店、藏身处",
+      "quick.1":"收集品清单","quick.1.sub":"已收录 142 项",
+      "quick.2":"角色介绍","quick.2.sub":"主角、势力、帮派",
+      "quick.3":"载具图鉴","quick.3.sub":"汽车、摩托、船、飞机",
+      "quick.4":"武器图鉴","quick.4.sub":"数值、改装、获取点",
+      "quick.5":"预告片解析","quick.5.sub":"逐帧拆解",
+      "quick.6":"版本更新日志","quick.6.sub":"补丁与热修",
+      "quick.7":"常见问题","quick.7.sub":"30 条有来源的解答",
+      "video.0":"第一支预告片 — 官方，2023 年 12 月",
+      "video.1":"第二支预告片 — 官方，2025 年 5 月",
+      "video.2":"Extended Look — 有哪些变化",
+      "log.0":"发售日期：2026 年 11 月 19 日 — 时间线已重建",
+      "log.1":"预告片 2 播放量突破 9300 万",
+      "log.2":"雷欧奈达地图：已收录 4 个区域",
+      "log.3":"收集品追踪器已收录 142 项",
+      "faq.0.q":"《GTA6》什么时候发售？",
+      "faq.0.a":"2026 年 11 月 19 日。Take-Two 已经两次调整窗口，完整时间线与两次延期的代价见上方发售时间一文。",
+      "faq.1.q":"已确认哪些平台？",
+      "faq.1.a":"PlayStation 5 与 Xbox Series X|S。R星目前只点名了这两个平台。",
+      "faq.2.q":"雷欧奈达地图已经收录多少？",
+      "faq.2.a":"四个区域：罪恶城、礁岛群、格拉斯河与安布罗西亚——互动地图上另有 142 项收集品。",
+      "faq.3.q":"攻略会剧透吗？",
+      "faq.3.a":"流程攻略不含剧情桥段。任何涉及剧情的页面都会在开头标注。",
+      "foot.blurb":"USGAME 是独立的玩家资料站。Grand Theft Auto 及相关商标归 Take-Two Interactive 所有，本站与 Rockstar Games 无隶属关系。",
+      "foot.col_guides":"攻略","foot.col_site":"本站","foot.lang_label":"语言",
+      "foot.link0":"关于本站","foot.link1":"联系方式","foot.link2":"隐私政策","foot.link3":"免责声明","foot.link4":"更新日志",
+      "foot.newsletter":"有预告片或大型补丁时发一封邮件。不发广告，随时退订。",
+      "foot.email_ph":"你的邮箱","foot.subscribe":"订阅提醒",
+      "foot.legal":"© 2026 usgame.net — 独立的 GTA6 新闻、攻略与情报站。"
+    }
+  };
+
+  var lang = "en";
+  function t(key){
+    if (T[lang] && typeof T[lang][key] === "string") return T[lang][key];
+    if (typeof T.en[key] === "string") return T.en[key];
+    return null;
+  }
+
+  function paintDate(){
+    var d = new Date();
+    var loc = lang === "zh" ? "zh-CN" : "en-US";
+    var opts = lang === "zh"
+      ? {year:"numeric",month:"long",day:"numeric",weekday:"long"}
+      : {weekday:"long",year:"numeric",month:"long",day:"numeric"};
+    var txt;
+    try { txt = d.toLocaleDateString(loc, opts); } catch(e){ txt = lang === "zh" ? "2026年9月26日" : "Saturday, September 26, 2026"; }
+    var nodes = document.querySelectorAll("[data-dateline]");
+    for (var i=0;i<nodes.length;i++) nodes[i].textContent = txt;
+  }
+
+  function visibleRailItems(){
+    var items = document.querySelectorAll("#railGrid .rail-item");
+    var out = [];
+    for (var i=0;i<items.length;i++){ if (!items[i].hidden) out.push(items[i]); }
+    return out;
+  }
+
+  function paintCount(){
+    var out = document.querySelector("[data-count]");
+    if (!out) return;
+    var n = visibleRailItems().length;
+    out.textContent = (t("ui.count") || "{n}").replace("{n}", n);
+  }
+
+  function paint(){
+    document.documentElement.lang = lang;
+    var i, nodes;
+    nodes = document.querySelectorAll("[data-i18n]");
+    for (i=0;i<nodes.length;i++){
+      var v = t(nodes[i].getAttribute("data-i18n"));
+      if (v !== null) nodes[i].textContent = v;
+    }
+    nodes = document.querySelectorAll("[data-i18n-ph]");
+    for (i=0;i<nodes.length;i++){
+      var p = t(nodes[i].getAttribute("data-i18n-ph"));
+      if (p !== null) nodes[i].setAttribute("placeholder", p);
+    }
+    nodes = document.querySelectorAll("[data-i18n-aria]");
+    for (i=0;i<nodes.length;i++){
+      var a = t(nodes[i].getAttribute("data-i18n-aria"));
+      if (a !== null) nodes[i].setAttribute("aria-label", a);
+    }
+    nodes = document.querySelectorAll("[data-i18n-title]");
+    for (i=0;i<nodes.length;i++){
+      var ti = t(nodes[i].getAttribute("data-i18n-title"));
+      if (ti !== null) nodes[i].setAttribute("title", ti);
+    }
+    nodes = document.querySelectorAll("[data-lang-toggle]");
+    for (i=0;i<nodes.length;i++) nodes[i].textContent = t("ui.lang_switch") || (lang === "en" ? "中文" : "EN");
+    paintDate();
+    paintCount();
+  }
+
+  /* ---- language toggle (header, drawer, footer) ---- */
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest ? e.target.closest("[data-lang-toggle]") : null;
+    if (!btn) return;
+    lang = (lang === "en") ? "zh" : "en";
+    paint();
+  });
+
+  /* ---- news category filter ---- */
+  var tabs = document.querySelectorAll(".tab");
+  for (var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener("click", function(){
+      var f = this.getAttribute("data-filter");
+      for (var j=0;j<tabs.length;j++){
+        tabs[j].setAttribute("aria-pressed", tabs[j] === this ? "true" : "false");
+      }
+      var items = document.querySelectorAll("#railGrid .rail-item");
+      for (var k=0;k<items.length;k++){
+        var cat = items[k].getAttribute("data-cat");
+        items[k].hidden = !(f === "all" || cat === f);
+      }
+      paintCount();
+    });
+  }
+
+  /* ---- hamburger drawer ---- */
+  var burger = document.getElementById("burger");
+  var drawer = document.getElementById("drawer");
+  if (burger && drawer){
+    burger.addEventListener("click", function(){
+      var open = burger.getAttribute("aria-expanded") === "true";
+      burger.setAttribute("aria-expanded", open ? "false" : "true");
+      drawer.classList.toggle("open", !open);
+    });
+    drawer.addEventListener("click", function(e){
+      if (e.target.tagName === "A" && window.matchMedia("(max-width:900px)").matches){
+        burger.setAttribute("aria-expanded","false");
+        drawer.classList.remove("open");
+      }
+    });
+  }
+
+  /* ---- FAQ accordion ---- */
+  var qs = document.querySelectorAll(".faq-q");
+  for (var q=0;q<qs.length;q++){
+    qs[q].addEventListener("click", function(){
+      var open = this.getAttribute("aria-expanded") === "true";
+      var panel = document.getElementById(this.getAttribute("aria-controls"));
+      this.setAttribute("aria-expanded", open ? "false" : "true");
+      if (panel) panel.hidden = open;
+    });
+  }
+
+  /* ---- front-end only forms ---- */
+  var forms = document.querySelectorAll("[data-search-form]");
+  for (var f=0;f<forms.length;f++){
+    forms[f].addEventListener("submit", function(e){ e.preventDefault(); });
+  }
+
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && burger && drawer && burger.getAttribute("aria-expanded") === "true"){
+      burger.setAttribute("aria-expanded","false");
+      drawer.classList.remove("open");
+      burger.focus();
+    }
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+---
+import "../styles/theme.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import fs from "node:fs";
+// 注意：这个文件里已经有一个局部变量叫 path（const path = Astro.url.pathname），
+// 所以不能 `import path from "node:path"` —— 会被局部变量遮蔽，运行时报 path.join is not a function。
+import { join as joinPath } from "node:path";
+import { SITE, ADSENSE_CLIENT, switchLang, t, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  type?: "website" | "article";
+  ogImage?: string;              // 站内绝对路径（/media/xxx.webp）
+  published?: Date;
+  modified?: Date;
+  noindex?: boolean;             // 站内工具页（搜索）用：不进索引，避免跟文章抢关键词
+  jsonld?: Record<string, unknown>[];   // 页面专属结构化数据，会并进 @graph
+}
+const {
+  lang, title, description = "", type = "website",
+  ogImage, published, modified, jsonld = [], noindex = false,
+} = Astro.props;
+
+// canonical / hreflang 一律从当前路径推，不手传 —— 手传迟早写错一个
+const path = Astro.url.pathname;
+const canonical = SITE.origin + path;
+const altEn = SITE.origin + switchLang(path, "en");
+const altZh = SITE.origin + switchLang(path, "zh");
+// 分享图（og:image）有两件事要在这里兜住：
+// ① 文章页传进来的封面是 WebP，但 Facebook / LinkedIn 的官方支持列表至今只列
+//    JPG/PNG/GIF —— WebP 会被直接吞掉，分享出去没有缩略图。所以映射到构建期
+//    生成的 JPEG 兄弟版（/media/og/*.jpg，同文件名）。
+// ② 栏目首页、关于、隐私这类页面没有封面，给一张站点级品牌卡，
+//    否则分享出去是一条没有缩略图的干链接。
+const DEFAULT_OG: Record<Lang, string> = {
+  en: "/assets/img/og-default-en.jpg",
+  zh: "/assets/img/og-default-zh.jpg",
+};
+// 封面可能来自 /media/（入库图）也可能来自 /assets/img/（站点素材），两个目录都认。
+// 并且只在 JPEG 兄弟版确实存在时才替换 —— 否则宁可发 WebP，也不要给出一个 404 的分享图。
+const shareImage = (() => {
+  if (!ogImage) return DEFAULT_OG[lang];
+  const m = /^(\/media\/|\/assets\/img\/)(.+)\.webp$/.exec(ogImage);
+  if (m) {
+    const cand = `${m[1]}og/${m[2]}.jpg`;
+    if (fs.existsSync(joinPath(process.cwd(), "public", cand))) return cand;
+  }
+  return ogImage;
+})();
+
+const abs = (u?: string) => (!u ? undefined : u.startsWith("http") ? u : SITE.origin + u);
+
+const graph: Record<string, unknown>[] = [
+  { "@type": "WebSite", "@id": `${SITE.origin}/#website`, url: `${SITE.origin}/`,
+    name: SITE.name, inLanguage: ["en", "zh-Hans"], publisher: { "@id": `${SITE.origin}/#org` } },
+  { "@type": "Organization", "@id": `${SITE.origin}/#org`, name: SITE.name,
+    url: `${SITE.origin}/`, logo: `${SITE.origin}/icon-512.png` },
+  ...jsonld,
+];
+---
+<!doctype html>
+<html lang={lang === "zh" ? "zh-Hans" : "en"} data-lang={lang}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  {/* 图标：SVG 优先（现代浏览器最清晰），ICO 兜底（旧浏览器、Windows 任务栏）。
+      apple-touch-icon 是满幅不透明的 —— iOS 会自己切圆角，给它透明边反而会露白底。 */}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0B0710" />
+  {/* 加到 iOS 主屏时显示的名字，跟拖拽收藏后的书签名保持一致 */}
+  <meta name="apple-mobile-web-app-title" content="USGAME-GTA6" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <link rel="alternate" hreflang="en" href={altEn} />
+  <link rel="alternate" hreflang="zh-Hans" href={altZh} />
+  <link rel="alternate" hreflang="x-default" href={altEn} />
+
+  {/* RSS 自动发现：浏览器和阅读器靠这一行自己找到订阅地址 */}
+  <link rel="alternate" type="application/rss+xml"
+        title={lang === "zh" ? "USGAME · GTA6 新闻与攻略" : "USGAME · GTA6 news and guides"}
+        href={`${SITE.origin}/${lang}/rss.xml`} />
+
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={title} />
+  {description && <meta property="og:description" content={description} />}
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={abs(shareImage)} />
+  <meta property="og:image:alt" content={lang === "zh" ? "USGAME —— GTA6 新闻、攻略与情报" : "USGAME — GTA6 news, guides and intel"} />
+  <meta property="og:locale" content={lang === "zh" ? "zh_Hans" : "en"} />
+  <meta property="og:locale:alternate" content={lang === "zh" ? "en" : "zh_Hans"} />
+  {published && <meta property="article:published_time" content={published.toISOString()} />}
+  {modified && <meta property="article:modified_time" content={modified.toISOString()} />}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  {description && <meta name="twitter:description" content={description} />}
+
+  {/* AdSense —— 全站只有这一条标签，不设任何广告位（广告由账号里的「自动广告」投放）。
+      它同时承担一件事：欧洲经济区/英国/瑞士的同意对话框由这条标签自己投递，
+      Google 的 CMP 不需要网站再加第二段代码（官方说明：consent message 由站上的
+      adsbygoogle 标签发出），前提是在 AdSense 后台「隐私权和消息」里把消息发布出来。
+      下面那个 meta 是给 AdSense 做站点归属校验的：爬虫读的是原始 HTML，不会执行
+      上面的 async 脚本，所以脚本和 meta 两样都要有。 */}
+  <meta name="google-adsense-account" content={ADSENSE_CLIENT} />
+  <script is:inline async crossorigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}></script>
+
+  <script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": graph })} />
+</head>
+<body id="top">
+  <a class="skip" href="#main">{t("skip", lang)}</a>
+  <SiteHeader lang={lang} />
+  <main id="main"><slot /></main>
+  <SiteFooter lang={lang} />
+  <script>import "../scripts/shell.js";</script>
+</body>
+</html>

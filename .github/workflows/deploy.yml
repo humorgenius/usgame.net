@@ -1,0 +1,70 @@
+# 推 main 即自动构建并发布到 GitHub Pages。
+#
+# 几个必须注意的点（都是"绿色构建、站点却不见"的经典原因）：
+#  1. 触发分支必须和仓库默认分支一致。本地如果是 master、这里写 main，
+#     推送后什么都不会发生，也不会有任何报错。本仓库初始化在 main。
+#  2. 仓库 Settings → Pages → Source 要选 "GitHub Actions"。下面的
+#     configure-pages 带了 enablement: true，会尽量自己开；但你在界面上
+#     确认一次更保险。
+#  3. .astro/types.d.ts 是 gitignore 的，runner 上没有 —— 不先跑 astro sync
+#     就直接 astro check，会报一堆"找不到模块"，而本地永远复现不出来。
+#  4. 检查 dist 的步骤（链接审计）必须排在 build 之后。
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 生成 Astro 类型（.astro/ 是 gitignore 的，见文件头注释第 3 条）
+        run: npx astro sync
+
+      - name: 类型与内容检查
+        run: npm run check
+
+      - name: 构建
+        run: npm run build
+
+      - name: 链接审计（产物级：链接文字必须对得上目标页标题）
+        run: python3 scripts/linkcheck.py
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

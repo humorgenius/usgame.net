@@ -1,0 +1,7 @@
+# 仓库里一律存 LF，避免 Windows 工作副本把整份文件标成"已修改"。
+# CI 在 ubuntu 上跑，脚本（python/shell）用 LF 才不会出怪问题。
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary

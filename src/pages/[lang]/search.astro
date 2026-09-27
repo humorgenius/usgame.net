@@ -1,0 +1,158 @@
+---
+// 站内搜索：/{lang}/search/
+//
+// 纯静态实现：把这个语言全部文章的「标题 + 摘要 + 栏目 + 二级小标题」打包成
+// 页面内的 dataset，浏览器里按关键词过滤。没有后端，也不需要后端。
+//
+// 两个刻意的取舍：
+//   1. 正文整段不进索引 —— 那会让页面涨到 200KB 级，而读者搜的词多半就出现在
+//      标题或文中小标题里，用「小标题」当索引信号性价比最高。
+//   2. 结果列表在服务端全量渲染，JS 只负责显隐。这样即使关掉 JS，
+//      它仍是一份可浏览的文章总目录，而不是一片空白。
+//
+// 本页 noindex：搜索结果是站内工具，被收录只会制造重复内容、跟文章页抢关键词。
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { LANGS, sectionLabel, articlePath, t, SITE, type Lang } from "../../i18n";
+
+// 跟站内其它 [lang] 页面保持一致：语言从 params 取，不从 props 取。
+// （第一版写成 props 却忘了给 getStaticPaths 传 props，lang 就成了 undefined，
+//   页头导航全被拼成 /undefined/news/ —— 构建不报错，链接全废。）
+export function getStaticPaths() {
+  return LANGS.map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params as { lang: Lang };
+
+const entries = (await getCollection("articles", ({ data }) => !data.draft && data.lang === lang))
+  .sort((a, b) => a.data.order - b.data.order);
+
+// 直接从原始 Markdown 抽二级小标题，比把 73 篇都 render() 一遍便宜得多
+const h2 = (body: string) =>
+  (body.match(/^##\s+(.+)$/gm) || []).map((x) => x.replace(/^##\s+/, "").trim()).join(" · ");
+
+// 用「 · 」而不是空格连接：既避免标题尾与摘要首拼接出假匹配，
+// 又不影响多关键词的 AND 匹配（中文没有空格，靠的是子串命中）。
+const rows = entries.map((e) => ({
+  title: e.data.title,
+  desc: e.data.dek || e.data.description || "",
+  section: sectionLabel(e.data.section, lang),
+  url: articlePath(lang, e.data.section, e.data.slug),
+  cover: e.data.cover || "",
+  blob: [
+    e.data.title, e.data.dek, e.data.description,
+    sectionLabel(e.data.section, lang), e.data.subcategory, h2(e.body ?? ""),
+  ].filter(Boolean).join(" · ").toLowerCase(),
+}));
+---
+<Base lang={lang} title={`${t("searchH1", lang)} | ${SITE.name}`} description={t("searchHint", lang)} noindex>
+  <div class="wrap srch-page">
+    <nav class="crumb" style="padding-top:0" aria-label="Breadcrumb">
+      <ol>
+        <li><a href={`/${lang}/`}>{t("home", lang)}</a></li>
+        <li><span aria-current="page">{t("searchH1", lang)}</span></li>
+      </ol>
+    </nav>
+
+    <p class="kicker" style="margin-top:22px"><span class="dot" aria-hidden="true"></span><span>{t("search", lang)}</span></p>
+    <h1 class="art-title" style="margin-top:16px">{t("searchH1", lang)}</h1>
+    <p class="art-dek">{t("searchHint", lang)}</p>
+
+    <form class="sform srch-form" id="srchForm" role="search" action={`/${lang}/search/`} method="get">
+      <label for="q" style="position:absolute;left:-9999px">{t("search", lang)}</label>
+      <input id="q" type="search" name="q" autocomplete="off" placeholder={t("searchPh", lang)}>
+      <button class="sbtn" type="submit">{t("search", lang)}</button>
+    </form>
+
+    <p class="srch-count" id="srchCount" role="status" aria-live="polite"
+       data-tpl={t("searchFound", lang)}></p>
+    <noscript><p class="srch-none" style="display:block">{t("searchNoJs", lang)}</p></noscript>
+
+    <ul class="srch-list" id="srchList">
+      {rows.map((r) => (
+        <li class="srch-item" data-s={r.blob}>
+          <a class="srch-link" href={r.url}>
+            {r.cover && (
+              <span class="srch-media">
+                <img src={r.cover} width="1200" height="675" loading="lazy" decoding="async" alt="" />
+              </span>
+            )}
+            <span class="srch-body">
+              <span class="srch-tag">{r.section}</span>
+              <span class="srch-title">{r.title}</span>
+              <span class="srch-desc">{r.desc}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="srch-none" id="srchNone" hidden data-tpl={t("searchNone", lang)}></p>
+  </div>
+</Base>
+
+<script>
+  // 类型说明：astro check 会连这里一起体检，所以 getElementById 一律按可空处理，
+  // 输入框要显式断言成 HTMLInputElement —— 否则 TS 认为它没有 .value。
+  (function () {
+    const list = document.getElementById('srchList');
+    const form = document.getElementById('srchForm');
+    const input = document.getElementById('q') as HTMLInputElement | null;
+    const count = document.getElementById('srchCount');
+    const none = document.getElementById('srchNone');
+    if (!list || !form || !input || !count || !none) return;
+
+    // 收窄后固化成非空类型再交给闭包用：TS 不会把外层的非空判定带进嵌套函数，
+    // 即便外层的变量是 const —— 所以在这一层把类型定死，闭包里就干净了。
+    const qEl: HTMLInputElement = input;
+    const listEl: HTMLElement = list;
+    const countEl: HTMLElement = count;
+    const noneEl: HTMLElement = none;
+
+    const items = Array.prototype.slice.call(
+      listEl.querySelectorAll('.srch-item')
+    ) as HTMLElement[];
+    const tFound = count.getAttribute('data-tpl') || '{n}';
+    const tNone = none.getAttribute('data-tpl') || '';
+    var timer: ReturnType<typeof setTimeout> | undefined;
+
+    function norm(s: string): string {
+      return (s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function apply(syncUrl: boolean): void {
+      var raw = norm(qEl.value);
+      // 多关键词按 AND 处理；中文没有词间空格，所以整串走子串命中。
+      // 这里刻意不做分词 —— 把中文问句拆成单字，返回的会是一堆噪声。
+      var terms = raw ? raw.split(' ').filter(Boolean) : [];
+      var hits = 0;
+      items.forEach(function (li) {
+        var blob = li.getAttribute('data-s') || '';
+        var ok = terms.every(function (term) { return blob.indexOf(term) !== -1; });
+        li.hidden = !ok;
+        if (ok) hits++;
+      });
+      countEl.textContent = terms.length ? tFound.replace('{n}', String(hits)) : '';
+      noneEl.hidden = !(terms.length && hits === 0);
+      noneEl.textContent = tNone.replace('{q}', qEl.value.trim());
+      if (syncUrl) {
+        // 用 replaceState 而不是 pushState：每敲一个字都塞一条历史记录，
+        // 读者按「后退」会被钉在搜索页里出不去。
+        var u = location.pathname + (raw ? '?q=' + encodeURIComponent(qEl.value.trim()) : '');
+        history.replaceState(null, '', u);
+      }
+    }
+
+    // 带 ?q= 进来（原生表单提交、或别人分享的链接）时先回填再筛
+    var qs = new URLSearchParams(location.search).get('q') || '';
+    if (qs) qEl.value = qs;
+
+    qEl.addEventListener('input', function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () { apply(true); }, 120);
+    });
+    qEl.addEventListener('search', function () { apply(true); });   // 点原生清除按钮
+    form.addEventListener('submit', function () { apply(true); });   // 提交仍交给原生 GET 跳转
+
+    apply(false);
+  })();
+</script>

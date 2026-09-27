@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<!--
+STANCE A — NEON VICE  (design sketch, not production code)
+One line: the homepage as the game's own poster — a full-bleed cinematic sunset, the loudest
+headline on the site, and everything else arranged underneath it like a film's end credits.
+Stolen from: Rockstar's own GTA VI promotional page, Vice City's in-game art direction, late-80s
+Miami tourist posters, neon signage photography. Heat haze and hotel neon — not cyberpunk.
+Type: Anton (condensed, caps) for the h1, the h2s and the buttons ONLY; Inter for every article
+title and all body copy, because a 60-character headline shouts if you set it in caps. Fallbacks
+Impact / Arial Black / Bahnschrift, then Segoe UI / Microsoft YaHei.
+Colour: ground #0B0710 (near-black plum, never pure black) under a faint grain; magenta #FF2D95 is
+the only interactive accent; #FF8A3D is spent on the horizon glow and exactly two dividers.
+Radii 14px cards / 8px thumbs / 999px pills. One shadow scale. If everything glows, nothing does.
+Deliberately NOT: a SaaS dashboard, white panels, pastel gradients, a sidebar block, a four-number
+stats band, glassmorphism, emoji icons, drop caps.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>USGAME — GTA VI news, guides and intel</title>
+<meta name="description" content="GTA VI news, guides and intel. Release date, the full Leonida map breakdown, character cast and day-one guides.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9680789453651246" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   0. TOKENS
+   ============================================================ */
+:root{
+  --bg:#0B0710;
+  --bg-deep:#08040C;
+  --panel:#150E1D;
+  --panel-hi:#1D1428;
+  --ink:#F6F0F7;
+  --muted:#A294B0;
+  --dim:#7E7089;
+  --mag:#FF2D95;
+  --org:#FF8A3D;
+  --line:rgba(255,45,149,.16);
+  --line-hi:rgba(255,45,149,.44);
+  --hair:rgba(255,255,255,.08);
+  --r:14px;
+  --r-sm:8px;
+  --r-pill:999px;
+  --pad:24px;          /* the one card padding value, site-wide */
+  --gut:24px;          /* the one wrapper padding-inline */
+  --wrap:76rem;        /* the one wrapper max-width */
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --font-d:Anton,Impact,"Arial Black",Bahnschrift,"Microsoft YaHei",sans-serif;
+  --font-b:Inter,"Segoe UI",system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   1. RESET + GROUND
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background-color:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-b);
+  font-size:16px;
+  line-height:1.62;
+  font-weight:400;
+  overflow-x:clip;
+}
+body::before{                    /* film grain */
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:var(--noise);opacity:.045;
+}
+header,main,footer{position:relative;z-index:1}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:4px}
+::selection{background:var(--mag);color:#12060F}
+
+/* ============================================================
+   2. THE ONE WRAPPER  — header, every section, footer
+   ============================================================ */
+.wrap{
+  width:100%;
+  max-width:var(--wrap);
+  margin-inline:auto;
+  padding-inline:var(--gut);
+}
+
+/* ============================================================
+   3. TYPE
+   ============================================================ */
+.eyebrow{
+  display:block;
+  font-family:var(--font-b);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--mag);
+  margin-bottom:10px;
+}
+.eyebrow.plain{color:var(--dim)}
+h2{
+  font-family:var(--font-d);
+  font-weight:400;
+  text-transform:uppercase;
+  font-size:clamp(1.65rem,3.4vw,2.45rem);
+  line-height:1;
+  letter-spacing:-.005em;
+}
+.sec-sub{color:var(--muted);font-size:14px;margin-top:10px;max-width:62ch}
+.lede{font-size:clamp(1rem,1.35vw,1.14rem);line-height:1.7;color:#DCD2E4;max-width:56ch}
+.muted{color:var(--muted)}
+.dim{color:var(--dim)}
+
+/* CJK paragraph rules — justify body copy, keep headings flush left */
+html[lang="zh"] .lede,
+html[lang="zh"] .excerpt,
+html[lang="zh"] .blurb,
+html[lang="zh"] .note,
+html[lang="zh"] .sec-sub,
+html[lang="zh"] .qe-sub,
+html[lang="zh"] .newsletter p{text-align:justify;line-height:1.85}
+html[lang="zh"] .card-title,
+html[lang="zh"] h2,
+html[lang="zh"] .hero-title{text-align:left;line-height:1.16}
+
+/* ============================================================
+   4. SKIP LINK
+   ============================================================ */
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:99;
+  background:var(--mag);color:#14040D;font-weight:700;font-size:13px;
+  padding:12px 18px;border-radius:0 0 var(--r-sm) 0;
+}
+.skip:focus{left:0}
+
+/* ============================================================
+   5. HEADER
+   ============================================================ */
+.hdr{
+  background:linear-gradient(180deg,#0E0815 0%,rgba(11,7,16,.92) 100%);
+  border-bottom:1px solid var(--hair);
+}
+.hdr-in{
+  display:flex;align-items:center;gap:20px;
+  min-height:70px;
+}
+.brand{
+  display:flex;align-items:baseline;gap:10px;flex:none;
+  font-family:var(--font-d);text-transform:uppercase;
+  font-size:1.45rem;letter-spacing:.02em;line-height:1;
+}
+.brand .bdg{
+  font-family:var(--font-b);font-size:10px;font-weight:700;letter-spacing:.16em;
+  color:var(--mag);border:1px solid var(--line-hi);border-radius:var(--r-pill);
+  padding:4px 9px 3px;transform:translateY(-3px);
+}
+.nav{margin-left:auto}
+.nav ul{display:flex;align-items:center;gap:16px}
+.nav a{
+  display:block;padding:6px 0;font-size:12.5px;font-weight:500;letter-spacing:.03em;
+  color:var(--muted);border-bottom:1px solid transparent;transition:color .18s ease,border-color .18s ease;
+}
+.nav a:hover,.nav a:focus-visible{color:var(--ink);border-bottom-color:var(--mag)}
+.nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--mag)}
+.tools{display:flex;align-items:center;gap:10px;flex:none;margin-left:4px}
+.icon-btn{
+  display:grid;place-items:center;width:38px;height:38px;border-radius:var(--r-sm);
+  border:1px solid var(--hair);color:var(--muted);
+  transition:color .18s ease,border-color .18s ease,background-color .18s ease;
+}
+.icon-btn:hover,.icon-btn:focus-visible{color:var(--ink);border-color:var(--line-hi);background:rgba(255,45,149,.07)}
+.icon-btn[aria-expanded="true"]{color:var(--mag);border-color:var(--line-hi)}
+.burger{display:none}
+.lang{display:flex;border:1px solid var(--hair);border-radius:var(--r-pill);padding:3px;gap:2px}
+.lang button{
+  font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 11px;border-radius:var(--r-pill);
+  color:var(--dim);transition:color .18s ease,background-color .18s ease;
+}
+.lang button:hover{color:var(--ink)}
+.lang button.on{background:var(--mag);color:#14040D}
+.hdr-search{border-top:1px solid var(--hair);background:rgba(255,45,149,.03)}
+.sform{display:flex;gap:10px;padding-block:14px}
+.sform input{
+  flex:1;min-width:0;background:#0D0814;border:1px solid var(--hair);border-radius:var(--r-sm);
+  color:var(--ink);font-family:var(--font-b);font-size:14px;padding:11px 14px;
+}
+.sform input::placeholder{color:var(--dim)}
+.sform input:focus-visible{border-color:var(--line-hi)}
+.sbtn{
+  border:1px solid var(--line-hi);border-radius:var(--r-sm);color:var(--mag);
+  padding:0 18px;font-family:var(--font-d);text-transform:uppercase;letter-spacing:.08em;font-size:.86rem;
+}
+.sbtn:hover{background:rgba(255,45,149,.12)}
+.mnav{border-top:1px solid var(--hair);background:#0C0713}
+.mnav-in{padding-block:10px 18px}
+.mnav ul{margin-bottom:14px}
+.mnav a{
+  display:block;padding:11px 0;font-size:15px;font-weight:500;color:#DCD2E4;
+  border-bottom:1px solid var(--hair);
+}
+.mnav a:hover,.mnav a:focus-visible{color:var(--mag)}
+.mnav .lang{width:max-content}
+
+/* ============================================================
+   6. ADS — always labelled, never disguised
+   ============================================================ */
+.ad{
+  border:1px dashed var(--line-hi);
+  border-radius:var(--r-sm);
+  background:rgba(255,45,149,.035);
+  padding:18px var(--pad);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  text-align:center;color:var(--dim);
+}
+.ad-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:#B79BB4;
+}
+.ad-size{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.ad-top{margin-top:20px;min-height:104px}
+.ad-infeed{grid-column:1/-1;min-height:130px;margin-block:4px}
+.ad-rail{min-height:250px}
+.ad-end{margin-top:56px;min-height:132px}
+
+/* ============================================================
+   7. HERO — full-bleed sunset, headline low-left
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  min-height:clamp(520px,78vh,740px);
+  display:grid;align-items:end;
+  border-bottom:1px solid rgba(255,138,61,.28);
+}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 58%}
+.hero-glow{
+  position:absolute;inset:auto 0 -22% 0;height:74%;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(255,138,61,.34) 0%,rgba(255,45,149,.14) 42%,rgba(255,45,149,0) 72%);
+  pointer-events:none;
+}
+.hero-scrim{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,45,149,.22) 0%,rgba(11,7,16,.06) 34%,rgba(11,7,16,.66) 70%,rgba(11,7,16,.96) 100%),
+    linear-gradient(92deg,rgba(11,7,16,.86) 0%,rgba(11,7,16,.30) 46%,rgba(255,138,61,.10) 100%);
+}
+.hero-scan{
+  position:absolute;inset:0;pointer-events:none;opacity:.30;
+  background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.055) 0 1px,rgba(0,0,0,0) 1px 4px);
+  mix-blend-mode:overlay;
+}
+.hero-in{position:relative;z-index:2;padding-block:clamp(72px,16vh,150px) clamp(38px,6vw,64px)}
+.hero .eyebrow{color:var(--org)}
+.hero-title{
+  font-family:var(--font-d);font-weight:400;text-transform:uppercase;
+  font-size:clamp(2.6rem,7vw,5.6rem);line-height:.92;letter-spacing:-.022em;
+  margin-bottom:20px;text-shadow:0 2px 34px rgba(0,0,0,.55);
+}
+.hero-title .ln{display:block}
+.hero-title .hl{color:var(--mag)}
+.hero .lede{max-width:54ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--font-d);text-transform:uppercase;letter-spacing:.09em;font-size:.95rem;
+  padding:14px 24px;border-radius:var(--r-sm);
+  transition:transform .18s ease,background-color .18s ease,border-color .18s ease,color .18s ease;
+}
+.btn-solid{background:var(--mag);color:#14040D}
+.btn-solid:hover,.btn-solid:focus-visible{background:#FF56A9;transform:translateY(-2px)}
+.btn-ghost{border:1px solid rgba(255,255,255,.3);color:var(--ink)}
+.btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--mag);color:var(--mag);transform:translateY(-2px)}
+.hero-meta{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
+  margin-top:26px;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#C6B8CF;
+}
+.hero-meta .rule{width:26px;height:1px;background:var(--org);flex:none}
+
+/* ============================================================
+   8. SECTIONS
+   ============================================================ */
+.sec{padding-block:clamp(52px,7vw,86px)}
+.sec-head{margin-bottom:26px}
+.sec-head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.stamp{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  display:flex;align-items:center;gap:8px;
+}
+.stamp .live{width:6px;height:6px;border-radius:50%;background:var(--org);flex:none}
+.more{
+  display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--mag);
+  border-bottom:1px solid var(--line-hi);padding-bottom:4px;
+  transition:gap .18s ease,color .18s ease;
+}
+.more:hover,.more:focus-visible{gap:12px;color:#FF66B4}
+
+/* bands */
+.band-dark{background:var(--bg-deep);border-block:1px solid var(--hair)}
+.band-cta{
+  background:linear-gradient(180deg,#0F0916 0%,#0B0710 100%);
+  border-top:1px solid rgba(255,138,61,.30);
+}
+
+/* ============================================================
+   9. CARDS
+   ============================================================ */
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.card:hover,.card:focus-within{
+  transform:translateY(-2px);border-color:var(--line-hi);box-shadow:var(--shadow);
+}
+.card-media{display:block;overflow:hidden;background:#0D0813}
+.card-media img{width:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .18s ease}
+.card:hover .card-media img,.card:focus-within .card-media img{transform:scale(1.04)}
+.card-body{padding:var(--pad);display:flex;flex-direction:column;gap:10px;flex:1}
+.meta{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
+}
+.meta .cat{color:var(--mag)}
+.meta .flag{display:inline-flex;align-items:center;gap:6px;color:var(--org)}
+.card-title{font-size:1.06rem;font-weight:600;line-height:1.32;letter-spacing:-.005em}
+.card-title a{transition:color .18s ease}
+.card-title a:hover,.card-title a:focus-visible{color:var(--mag)}
+.excerpt{font-size:13.5px;line-height:1.65;color:var(--muted);flex:1}
+.card-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px;padding-top:12px;border-top:1px solid var(--hair);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.card-foot .read{display:inline-flex;align-items:center;gap:6px;color:var(--mag)}
+.card:hover .card-foot .read{gap:10px}
+
+/* news grid */
+.news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.news-card.lead{grid-column:1/-1;display:grid;grid-template-columns:1.12fr 1fr}
+.news-card.lead .card-media{height:100%;min-height:290px}
+.news-card.lead .card-media img{height:100%;aspect-ratio:auto}
+.news-card.lead .card-body{justify-content:center;gap:12px}
+.news-card.lead .card-title{font-size:clamp(1.2rem,2.1vw,1.62rem);line-height:1.22}
+
+/* tabs */
+.tabs{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;
+  padding-bottom:16px;border-bottom:1px solid var(--hair);
+}
+.tab{
+  font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--hair);color:var(--muted);
+  transition:color .18s ease,border-color .18s ease,background-color .18s ease;
+}
+.tab:hover{color:var(--ink);border-color:var(--line-hi)}
+.tab[aria-pressed="true"]{background:rgba(255,45,149,.14);border-color:var(--line-hi);color:var(--mag)}
+.tab-count{margin-left:auto;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);align-self:center}
+
+/* guides */
+.guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--hair);border-radius:var(--r-pill);padding:4px 10px;color:var(--muted);
+}
+.chip.hi{color:var(--mag);border-color:var(--line-hi);background:rgba(255,45,149,.08)}
+
+/* quick entries — a menu, not cards */
+.qe-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.qe{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border:1px solid var(--hair);border-radius:var(--r-sm);
+  background:rgba(255,255,255,.018);
+  transition:background-color .18s ease,border-color .18s ease,transform .18s ease;
+}
+.qe:hover,.qe:focus-visible{background:rgba(255,45,149,.08);border-color:var(--line-hi);transform:translateY(-2px)}
+.qe-thumb{width:46px;height:46px;flex:none;border-radius:var(--r-sm);object-fit:cover}
+.qe-txt{min-width:0;display:flex;flex-direction:column;gap:2px}
+.qe-name{font-size:13.5px;font-weight:600;line-height:1.25}
+.qe-sub{font-size:11px;line-height:1.4;color:var(--dim)}
+.qe-arw{margin-left:auto;color:var(--dim);flex:none;transition:color .18s ease,transform .18s ease}
+.qe:hover .qe-arw,.qe:focus-visible .qe-arw{color:var(--mag);transform:translateX(3px)}
+
+/* videos */
+.vid-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:24px;align-items:start}
+.vid-frame{
+  position:relative;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:#000;aspect-ratio:16/9;
+}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-cap{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:14px}
+.vid-cap .cap{font-size:13px;color:#DCD2E4;font-weight:500}
+.note{font-size:12.5px;line-height:1.7;color:var(--dim);margin-top:8px;max-width:70ch}
+.vthumbs{display:flex;flex-direction:column;gap:12px}
+.vthumb{
+  display:grid;grid-template-columns:118px 1fr;gap:14px;align-items:center;
+  border:1px solid var(--line);border-radius:var(--r-sm);background:var(--panel);overflow:hidden;
+  transition:transform .18s ease,border-color .18s ease;
+}
+.vthumb:hover,.vthumb:focus-visible{transform:translateY(-2px);border-color:var(--line-hi)}
+.vthumb-img{position:relative;height:100%;overflow:hidden;background:#0D0813}
+.vthumb-img img{width:100%;height:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .18s ease}
+.vthumb:hover .vthumb-img img{transform:scale(1.05)}
+.vthumb-play{
+  position:absolute;inset:0;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(180deg,rgba(11,7,16,.15),rgba(11,7,16,.62));
+}
+.vthumb-txt{padding:14px 14px 14px 0}
+.vthumb-txt h3{font-size:13px;font-weight:600;line-height:1.35}
+.vthumb-dur{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+
+/* newsletter / closing band */
+.newsletter{
+  display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;
+  padding-block:clamp(52px,7vw,84px);
+}
+.newsletter h2{font-size:clamp(1.5rem,3vw,2.15rem);text-transform:none;font-family:var(--font-b);font-weight:600;line-height:1.24;letter-spacing:-.01em}
+.newsletter p{margin-top:14px;font-size:14px;color:var(--muted)}
+.nl-form{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.nl-form input{
+  flex:1;min-width:190px;background:#0D0814;border:1px solid var(--hair);border-radius:var(--r-sm);
+  color:var(--ink);font-family:var(--font-b);font-size:14px;padding:13px 14px;
+}
+.nl-form input::placeholder{color:var(--dim)}
+.dashed-note{
+  margin-top:14px;border:1px dashed var(--line-hi);border-radius:var(--r-sm);
+  padding:11px 14px;font-size:11.5px;color:#B79BB4;letter-spacing:.04em;
+}
+.blurb{
+  margin-top:22px;padding-top:20px;border-top:1px solid var(--hair);
+  font-size:12.5px;line-height:1.75;color:var(--dim);max-width:78ch;clear:both;
+}
+
+/* ============================================================
+   10. FOOTER
+   ============================================================ */
+.ftr{border-top:1px solid var(--hair);background:#09050E;padding-block:clamp(40px,5vw,60px) 28px}
+.ftr-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:clamp(24px,4vw,48px)}
+.ftr h2,.ftr h3{
+  font-family:var(--font-b);font-size:11px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mag);margin-bottom:16px;
+}
+.ftr-brand{display:flex;align-items:baseline;gap:10px;font-family:var(--font-d);text-transform:uppercase;font-size:1.35rem;margin-bottom:12px}
+.ftr-brand .bdg{
+  font-family:var(--font-b);font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--mag);
+  border:1px solid var(--line-hi);border-radius:var(--r-pill);padding:4px 9px 3px;transform:translateY(-3px);
+}
+.ftr-tag{font-size:12.5px;color:var(--muted);max-width:34ch}
+.ftr ul li{margin-bottom:10px}
+.ftr ul a{font-size:12.5px;color:var(--muted);transition:color .18s ease}
+.ftr ul a:hover,.ftr ul a:focus-visible{color:var(--mag)}
+.ftr-legal{
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;
+  margin-top:clamp(32px,5vw,48px);padding-top:22px;border-top:1px solid var(--hair);
+  font-size:11.5px;letter-spacing:.06em;color:var(--dim);
+}
+.ftr-legal .push{margin-left:auto}
+
+/* ============================================================
+   11. MOTION
+   ============================================================ */
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: no-preference){
+  .hero-in .eyebrow{animation:rise .7s cubic-bezier(.22,.61,.36,1) both;animation-delay:.05s}
+  .hero-title{animation:rise .8s cubic-bezier(.22,.61,.36,1) both;animation-delay:.14s}
+  .hero .lede{animation:rise .8s cubic-bezier(.22,.61,.36,1) both;animation-delay:.24s}
+  .cta-row{animation:rise .8s cubic-bezier(.22,.61,.36,1) both;animation-delay:.34s}
+  .hero-meta{animation:rise .8s cubic-bezier(.22,.61,.36,1) both;animation-delay:.44s}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* ============================================================
+   12. BREAKPOINTS
+   ============================================================ */
+@media (max-width:1180px){
+  .nav ul{gap:12px}
+  .nav a{font-size:12px}
+}
+@media (max-width:1080px){
+  .nav{display:none}
+  .burger{display:grid}
+  .hdr-in{gap:14px}
+  .tools{margin-left:auto}
+  .qe-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vid-grid{grid-template-columns:minmax(0,1fr)}
+  .newsletter{grid-template-columns:minmax(0,1fr)}
+  .ftr-grid{grid-template-columns:1fr 1fr}
+  .ftr-brand + .ftr-tag{grid-column:1/-1}
+}
+@media (max-width:820px){
+  .news-grid{grid-template-columns:minmax(0,1fr)}
+  .news-card.lead{grid-template-columns:minmax(0,1fr)}
+  .news-card.lead .card-media{min-height:0}
+  .news-card.lead .card-media img{aspect-ratio:16/9;height:auto}
+}
+@media (max-width:640px){
+  :root{--pad:20px}
+  .guide-grid{grid-template-columns:minmax(0,1fr)}
+  .qe-grid{grid-template-columns:minmax(0,1fr)}
+  .ftr-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-title{letter-spacing:-.015em}
+  .hdr-in{min-height:62px}
+  .brand{font-size:1.25rem}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-en="Skip to content" data-zh="跳到正文">Skip to content</a>
+
+<!-- ============================ HEADER ============================ -->
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="#top">USGAME <span class="bdg">GTA VI</span></a>
+
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        <li><a href="#news" aria-current="page" data-en="News" data-zh="新闻">News</a></li>
+        <li><a href="#guides" data-en="Guides" data-zh="攻略">Guides</a></li>
+        <li><a href="#quick" data-en="Map &amp; Collectibles" data-zh="地图 / 收集">Map &amp; Collectibles</a></li>
+        <li><a href="#news" data-en="Characters" data-zh="角色 / 剧情">Characters</a></li>
+        <li><a href="#quick" data-en="Vehicles" data-zh="载具">Vehicles</a></li>
+        <li><a href="#quick" data-en="Weapons" data-zh="武器">Weapons</a></li>
+        <li><a href="#videos" data-en="Videos" data-zh="视频">Videos</a></li>
+        <li><a href="#quick" data-en="FAQ" data-zh="FAQ">FAQ</a></li>
+        <li><a href="#about" data-en="About" data-zh="关于">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <button class="icon-btn" id="searchToggle" type="button" aria-expanded="false" aria-controls="searchRow"
+              data-ar-en="Search" data-ar-zh="搜索" aria-label="Search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>
+        </svg>
+      </button>
+
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="on" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+
+      <button class="icon-btn burger" id="burger" type="button" aria-expanded="false" aria-controls="mobileNav"
+              data-ar-en="Menu" data-ar-zh="菜单" aria-label="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hdr-search" id="searchRow" hidden>
+    <div class="wrap">
+      <form class="sform" id="searchForm" role="search">
+        <label class="sr-only" for="searchInput" style="position:absolute;left:-9999px" data-en="Search" data-zh="搜索">Search</label>
+        <input id="searchInput" type="search" name="q"
+               data-ph-en="Search news, guides, weapons…" data-ph-zh="搜索新闻、攻略、武器…"
+               placeholder="Search news, guides, weapons…">
+        <button class="sbtn" type="submit" data-en="Search" data-zh="搜索">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mnav" id="mobileNav" hidden>
+    <div class="wrap mnav-in">
+      <nav aria-label="Mobile">
+        <ul>
+          <li><a href="#news" data-en="News" data-zh="新闻">News</a></li>
+          <li><a href="#guides" data-en="Guides" data-zh="攻略">Guides</a></li>
+          <li><a href="#quick" data-en="Map &amp; Collectibles" data-zh="地图 / 收集">Map &amp; Collectibles</a></li>
+          <li><a href="#news" data-en="Characters" data-zh="角色 / 剧情">Characters</a></li>
+          <li><a href="#quick" data-en="Vehicles" data-zh="载具">Vehicles</a></li>
+          <li><a href="#quick" data-en="Weapons" data-zh="武器">Weapons</a></li>
+          <li><a href="#videos" data-en="Videos" data-zh="视频">Videos</a></li>
+          <li><a href="#quick" data-en="FAQ" data-zh="FAQ">FAQ</a></li>
+          <li><a href="#about" data-en="About" data-zh="关于">About</a></li>
+        </ul>
+      </nav>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="on" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- AD 1 of 4 — below nav -->
+  <div class="wrap">
+    <div class="ad ad-top" role="complementary" data-ar-en="Advertisement" data-ar-zh="广告">
+      <span class="ad-label" data-en="Advertisement" data-zh="广告">Advertisement</span>
+      <span class="ad-size">728×90 / 970×250</span>
+    </div>
+  </div>
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <img class="hero-img" src="../assets/img/hero-sunset.webp" width="1600" height="900"
+         loading="eager" fetchpriority="high" decoding="async"
+         data-alt-en="Leonida at sunset: a chrome-and-neon skyline over the bay, seen through heat haze."
+         data-alt-zh="雷欧奈达的日落：热浪中隔海望去的霓虹天际线。"
+         alt="Leonida at sunset: a chrome-and-neon skyline over the bay, seen through heat haze.">
+    <span class="hero-glow" aria-hidden="true"></span>
+    <span class="hero-scrim" aria-hidden="true"></span>
+    <span class="hero-scan" aria-hidden="true"></span>
+
+    <div class="wrap hero-in">
+      <p class="eyebrow" data-en="Rockstar Games · Leonida, USA" data-zh="Rockstar Games · 雷欧奈达州">Rockstar Games · Leonida, USA</p>
+      <h1 class="hero-title" id="hero-title">
+        <span class="ln hl" data-en="Vice City" data-zh="罪恶城">Vice City</span>
+        <span class="ln" data-en="Is Calling." data-zh="在等你。">Is Calling.</span>
+      </h1>
+      <p class="lede" data-en="Jason and Lucia have one shot at the easy life. Everything Rockstar has confirmed, every trailer frame we have picked apart, and the guides that will get you through Leonida on day one."
+         data-zh="杰森与露西亚只有一次改变命运的机会。R星已经确认的一切、我们逐帧拆过的预告片，以及开局就能用上的雷欧奈达生存攻略。">Jason and Lucia have one shot at the easy life. Everything Rockstar has confirmed, every trailer frame we have picked apart, and the guides that will get you through Leonida on day one.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-solid" href="#news" data-en="Latest news" data-zh="最新新闻">Latest news</a>
+        <a class="btn btn-ghost" href="#guides" data-en="Start with the guides" data-zh="从攻略开始">Start with the guides</a>
+      </div>
+
+      <p class="hero-meta">
+        <span class="rule" aria-hidden="true"></span>
+        <span><time datetime="2026-11-19">2026-11-19</time></span>
+        <span data-en="Launch · PlayStation 5 · Xbox Series X|S" data-zh="发售 · PS5 · Xbox Series X|S">Launch · PlayStation 5 · Xbox Series X|S</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ TRAILER THEATRE ============================ -->
+  <section class="sec band-dark" id="trailer" aria-labelledby="trailer-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-en="Official · youtube-nocookie" data-zh="官方 · youtube-nocookie">Official · youtube-nocookie</p>
+        <div class="sec-head-row">
+          <h2 id="trailer-h" data-en="GTA 6 Official Trailer" data-zh="GTA6 官方预告片">GTA 6 Official Trailer</h2>
+          <span class="stamp"><span class="live" aria-hidden="true"></span><span data-en="Updated" data-zh="更新于">Updated</span> 2026-09-24</span>
+        </div>
+      </div>
+
+      <div class="vid-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/VQRLujxTm3c?si=BV4Rlx2bLlOjeuQU&start=3"
+                title="GTA 6 Official Trailer" loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+
+      <div class="vid-cap">
+        <span class="cap" data-en="Trailer 2 — Rockstar Games, official" data-zh="第二支预告片 — Rockstar 官方">Trailer 2 — Rockstar Games, official</span>
+      </div>
+      <p class="note" data-en="Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel."
+         data-zh="两支官方预告片均使用 youtube-nocookie.com 域名嵌入以保护隐私。若播放器未能加载，请前往 Rockstar 官方频道观看。">Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel.</p>
+    </div>
+  </section>
+
+  <!-- ============================ LATEST NEWS ============================ -->
+  <section class="sec" id="news" aria-labelledby="news-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-en="News" data-zh="新闻">News</p>
+        <div class="sec-head-row">
+          <h2 id="news-h" data-en="Latest news" data-zh="最新新闻">Latest news</h2>
+          <a class="more" href="#news"><span data-en="All news" data-zh="全部新闻">All news</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="tabs" role="group" aria-label="Filter news by category">
+        <button class="tab" type="button" data-filter="all" aria-pressed="true" data-en="All" data-zh="全部">All</button>
+        <button class="tab" type="button" data-filter="news" aria-pressed="false" data-en="News" data-zh="新闻">News</button>
+        <button class="tab" type="button" data-filter="guides" aria-pressed="false" data-en="Guides" data-zh="攻略">Guides</button>
+        <button class="tab" type="button" data-filter="map" aria-pressed="false" data-en="Map" data-zh="地图">Map</button>
+        <button class="tab" type="button" data-filter="characters" aria-pressed="false" data-en="Characters" data-zh="角色">Characters</button>
+        <span class="tab-count"><span id="newsCount">6</span> <span data-en="stories" data-zh="篇">stories</span></span>
+      </div>
+
+      <div class="news-grid" id="newsGrid">
+        <!-- 1 — lead story, spans both columns -->
+        <article class="card news-card lead" data-cat="news">
+          <span class="card-media">
+            <img src="../assets/img/scene-boxart.webp" width="1200" height="674" loading="lazy"
+                 data-alt-en="GTA VI cover art: Lucia and Jason, box art crop." data-alt-zh="《GTA6》封面图：露西亚与杰森。"
+                 alt="GTA VI cover art: Lucia and Jason, box art crop.">
+          </span>
+          <div class="card-body">
+            <p class="meta">
+              <span class="flag"><span class="cat" data-en="News" data-zh="新闻">News</span> · <span data-en="Breaking" data-zh="快讯">Breaking</span></span>
+              <time datetime="2026-09-24">2026-09-24</time>
+            </p>
+            <h3 class="card-title"><a href="#news" data-en="GTA VI release date explained: everything pointing at November 19, 2026" data-zh="《GTA6》发售时间全解析：预计2026年11月19日正式上线">GTA VI release date explained: everything pointing at November 19, 2026</a></h3>
+            <p class="excerpt" data-en="Take-Two has moved the date twice. Here is the full timeline, what the delay actually cost, and why November 19 is the number that survived."
+               data-zh="Take-Two 已经两次调整发售窗口。完整时间线、延期究竟损失了什么，以及为什么最后留下的是 11 月 19 日。">Take-Two has moved the date twice. Here is the full timeline, what the delay actually cost, and why November 19 is the number that survived.</p>
+            <p class="card-foot">
+              <span>6 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="card news-card" data-cat="news">
+          <span class="card-media">
+            <img src="../assets/img/hero-neon-night.webp" width="1600" height="900" loading="lazy"
+                 data-alt-en="Neon-lit Vice City street at night." data-alt-zh="霓虹灯下的罪恶城夜景街道。"
+                 alt="Neon-lit Vice City street at night.">
+          </span>
+          <div class="card-body">
+            <p class="meta"><span class="cat" data-en="News" data-zh="新闻">News</span><time datetime="2026-09-22">2026-09-22</time></p>
+            <h3 class="card-title"><a href="#news" data-en="Every official Rockstar announcement so far, in one timeline" data-zh="《GTA6》Rockstar 官方消息汇总">Every official Rockstar announcement so far, in one timeline</a></h3>
+            <p class="excerpt" data-en="From the 2022 leak to the Extended Look: dated, sourced, and separated from the rumour pile."
+               data-zh="从 2022 年泄露到 Extended Look：逐条标注日期与来源，和传闻堆分开。">From the 2022 leak to the Extended Look: dated, sourced, and separated from the rumour pile.</p>
+            <p class="card-foot"><span>5 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="card news-card" data-cat="map">
+          <span class="card-media">
+            <img src="../assets/img/scene-keys.webp" width="1200" height="675" loading="lazy"
+                 data-alt-en="The Florida Keys-style island chain off the Leonida coast." data-alt-zh="雷欧奈达外海的礁岛群。"
+                 alt="The Florida Keys-style island chain off the Leonida coast.">
+          </span>
+          <div class="card-body">
+            <p class="meta"><span class="cat" data-en="Map" data-zh="地图">Map</span><time datetime="2026-09-20">2026-09-20</time></p>
+            <h3 class="card-title"><a href="#news" data-en="Leonida, region by region: the full map breakdown" data-zh="《GTA6》地图介绍：雷欧奈达州全解析">Leonida, region by region: the full map breakdown</a></h3>
+            <p class="excerpt" data-en="Vice City's six districts, the Keys, Grassrivers and Ambrosia — what each area is for and what it hides."
+               data-zh="罪恶城六大街区、礁岛群、格拉斯河与安布罗西亚——每一区是什么、藏着什么。">Vice City's six districts, the Keys, Grassrivers and Ambrosia — what each area is for and what it hides.</p>
+            <p class="card-foot"><span>7 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="card news-card" data-cat="guides">
+          <span class="card-media">
+            <img src="../assets/img/scene-moody.webp" width="1200" height="675" loading="lazy"
+                 data-alt-en="A patrol car blocking a rain-slick Leonida street." data-alt-zh="雨夜中被警车封锁的雷欧奈达街道。"
+                 alt="A patrol car blocking a rain-slick Leonida street.">
+          </span>
+          <div class="card-body">
+            <p class="meta"><span class="cat" data-en="Guides" data-zh="攻略">Guides</span><time datetime="2026-09-19">2026-09-19</time></p>
+            <h3 class="card-title"><a href="#news" data-en="Six stars are back: how the new wanted system actually works" data-zh="《GTA6》通缉等级改动：从五星到六星的全面进化">Six stars are back: how the new wanted system actually works</a></h3>
+            <p class="excerpt" data-en="Witnesses, licence plates and a police force that remembers you. Escaping is a route problem now, not a speed problem."
+               data-zh="目击者、车牌，以及一支会记住你的警察系统。逃跑现在是路线问题，不是速度问题。">Witnesses, licence plates and a police force that remembers you. Escaping is a route problem now, not a speed problem.</p>
+            <p class="card-foot"><span>8 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+
+        <!-- AD 2 of 4 — in-feed, after the 4th news card -->
+        <div class="ad ad-infeed" role="complementary" data-ar-en="Advertisement" data-ar-zh="广告">
+          <span class="ad-label" data-en="Advertisement" data-zh="广告">Advertisement</span>
+          <span class="ad-size" data-en="in-feed — every 4th news card" data-zh="信息流内 — 每 4 条新闻后">in-feed — every 4th news card</span>
+        </div>
+
+        <!-- 5 -->
+        <article class="card news-card" data-cat="guides">
+          <span class="card-media">
+            <img src="../assets/img/scene-car-night.webp" width="1200" height="675" loading="lazy"
+                 data-alt-en="A tuned coupé under sodium street lights." data-alt-zh="钠灯下的改装跑车。"
+                 alt="A tuned coupé under sodium street lights.">
+          </span>
+          <div class="card-body">
+            <p class="meta"><span class="cat" data-en="Guides" data-zh="攻略">Guides</span><time datetime="2026-09-18">2026-09-18</time></p>
+            <h3 class="card-title"><a href="#news" data-en="Vehicle system deep dive: physics, tuning and the new handling model" data-zh="《GTA6》载具系统详解：物理、改装与全新驾驶体验">Vehicle system deep dive: physics, tuning and the new handling model</a></h3>
+            <p class="excerpt" data-en="Weight transfer, tyre wear and per-panel damage — what changed from GTA V and what it means for a getaway."
+               data-zh="重心转移、轮胎磨损与逐块车损——相比 GTA5 变了什么，对逃逸意味着什么。">Weight transfer, tyre wear and per-panel damage — what changed from GTA V and what it means for a getaway.</p>
+            <p class="card-foot"><span>9 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+
+        <!-- 6 -->
+        <article class="card news-card" data-cat="characters">
+          <span class="card-media">
+            <img src="../assets/img/scene-pool.webp" width="1200" height="675" loading="lazy"
+                 data-alt-en="A hotel pool deck at golden hour." data-alt-zh="金色时刻的酒店泳池甲板。"
+                 alt="A hotel pool deck at golden hour.">
+          </span>
+          <div class="card-body">
+            <p class="meta"><span class="cat" data-en="Characters" data-zh="角色">Characters</span><time datetime="2026-09-16">2026-09-16</time></p>
+            <h3 class="card-title"><a href="#news" data-en="The full cast list: every character Rockstar has put a name to" data-zh="《GTA6》全部角色背景一览">The full cast list: every character Rockstar has put a name to</a></h3>
+            <p class="excerpt" data-en="Lucia, Jason, Boobie Ike, Brian Heder, Raul Bautista and the rest of Leonida's bad company."
+               data-zh="露西亚、杰森、波比·艾克、布莱恩·赫德、拉乌尔·巴蒂斯塔，以及雷欧奈达其余的坏朋友。">Lucia, Jason, Boobie Ike, Brian Heder, Raul Bautista and the rest of Leonida's bad company.</p>
+            <p class="card-foot"><span>6 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+              </span>
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ GUIDES ============================ -->
+  <section class="sec band-dark" id="guides" aria-labelledby="guides-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-en="Guides" data-zh="攻略">Guides</p>
+        <div class="sec-head-row">
+          <h2 id="guides-h" data-en="Start with the guides" data-zh="从攻略开始">Start with the guides</h2>
+          <a class="more" href="#guides"><span data-en="All guides" data-zh="全部攻略">All guides</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <p class="sec-sub" data-en="Six write-ups that carry the first weekend: where to go, what it pays, what it costs you."
+           data-zh="六篇撑起开局第一个周末的内容：去哪儿、能赚多少、代价是什么。">Six write-ups that carry the first weekend: where to go, what it pays, what it costs you.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-beach.webp" width="1200" height="675" loading="lazy"
+            data-alt-en="A Leonida beach at first light." data-alt-zh="黎明时的雷欧奈达海滩。" alt="A Leonida beach at first light."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Walkthrough" data-zh="流程">Walkthrough</span><span class="chip" data-en="Start here" data-zh="入门">Start here</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="First three hours: a spoiler-free starting route" data-zh="开局前三小时：无剧透起手路线">First three hours: a spoiler-free starting route</a></h3>
+            <p class="card-foot"><span>12 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-weapons.webp" width="1200" height="676" loading="lazy"
+            data-alt-en="A wall of laid-out weapons." data-alt-zh="一整面摊开的武器装备。" alt="A wall of laid-out weapons."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Systems" data-zh="机制">Systems</span><span class="chip" data-en="Core" data-zh="核心">Core</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="Robbery planning: how every heist is built" data-zh="抢劫机制：每一票的行动结构">Robbery planning: how every heist is built</a></h3>
+            <p class="card-foot"><span>9 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-turtle.webp" width="1024" height="576" loading="lazy"
+            data-alt-en="A sea turtle over a reef." data-alt-zh="礁石上方的一只海龟。" alt="A sea turtle over a reef."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Collectibles" data-zh="收集">Collectibles</span><span class="chip" data-en="Completionist" data-zh="全收集">Completionist</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="Collectibles and buried treasure, mapped" data-zh="收集品与海底宝藏全图">Collectibles and buried treasure, mapped</a></h3>
+            <p class="card-foot"><span>18 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-tropical.webp" width="1200" height="675" loading="lazy"
+            data-alt-en="Palms and a pastel apartment block." data-alt-zh="棕榈树与粉彩公寓楼。" alt="Palms and a pastel apartment block."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Economy" data-zh="经济">Economy</span><span class="chip" data-en="Core" data-zh="核心">Core</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="Money early: businesses, safehouses and cash flow" data-zh="前期赚钱：生意、安全屋与现金流">Money early: businesses, safehouses and cash flow</a></h3>
+            <p class="card-foot"><span>11 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-panther.webp" width="1200" height="675" loading="lazy"
+            data-alt-en="A panther in the Grassrivers marshland." data-alt-zh="格拉斯河沼泽中的美洲豹。" alt="A panther in the Grassrivers marshland."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Activities" data-zh="活动">Activities</span><span class="chip" data-en="Optional" data-zh="可选">Optional</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="Hunting and fishing without losing a day" data-zh="钓鱼与狩猎：不浪费一天时间">Hunting and fishing without losing a day</a></h3>
+            <p class="card-foot"><span>7 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-media"><img src="../assets/img/scene-plane.webp" width="1200" height="675" loading="lazy"
+            data-alt-en="A light aircraft banking over the coast." data-alt-zh="海岸上空倾斜飞行的小型飞机。" alt="A light aircraft banking over the coast."></span>
+          <div class="card-body">
+            <div class="chips"><span class="chip hi" data-en="Vehicles" data-zh="载具">Vehicles</span><span class="chip" data-en="Advanced" data-zh="进阶">Advanced</span></div>
+            <h3 class="card-title"><a href="#guides" data-en="Flying in Leonida: every aircraft and where to steal it" data-zh="雷欧奈达飞行手册：全部飞行器与获取方式">Flying in Leonida: every aircraft and where to steal it</a></h3>
+            <p class="card-foot"><span>14 <span data-en="min read" data-zh="分钟阅读">min read</span></span>
+              <span class="read"><span data-en="Read" data-zh="阅读">Read</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ QUICK ENTRIES ============================ -->
+  <section class="sec" id="quick" aria-labelledby="quick-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-en="Intel" data-zh="情报">Intel</p>
+        <div class="sec-head-row">
+          <h2 id="quick-h" data-en="Quick entries" data-zh="快速入口">Quick entries</h2>
+          <span class="stamp"><span class="live" aria-hidden="true"></span>142 <span data-en="items tracked" data-zh="项已收录">items tracked</span></span>
+        </div>
+      </div>
+
+      <div class="qe-grid">
+        <a class="qe" href="#quick">
+          <img class="qe-thumb" src="../assets/img/scene-keys.webp" width="1200" height="675" loading="lazy"
+               data-alt-en="Interactive map" data-alt-zh="互动地图" alt="Interactive map">
+          <span class="qe-txt"><span class="qe-name" data-en="Interactive map" data-zh="互动地图">Interactive map</span><span class="qe-sub" data-en="Districts, shops, hideouts" data-zh="街区、商店、藏身处">Districts, shops, hideouts</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#quick">
+          <img class="qe-thumb" src="../assets/img/scene-turtle.webp" width="1024" height="576" loading="lazy"
+               data-alt-en="Collectibles" data-alt-zh="收集品清单" alt="Collectibles">
+          <span class="qe-txt"><span class="qe-name" data-en="Collectibles" data-zh="收集品清单">Collectibles</span><span class="qe-sub" data-en="142 tracked items" data-zh="已收录 142 项">142 tracked items</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#quick">
+          <img class="qe-thumb" src="../assets/img/card-lucia.webp" width="700" height="394" loading="lazy"
+               data-alt-en="Characters" data-alt-zh="角色介绍" alt="Characters">
+          <span class="qe-txt"><span class="qe-name" data-en="Characters" data-zh="角色介绍">Characters</span><span class="qe-sub" data-en="Cast, factions, gangs" data-zh="主角、势力、帮派">Cast, factions, gangs</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#quick">
+          <img class="qe-thumb" src="../assets/img/scene-car-night.webp" width="1200" height="675" loading="lazy"
+               data-alt-en="Vehicle index" data-alt-zh="载具图鉴" alt="Vehicle index">
+          <span class="qe-txt"><span class="qe-name" data-en="Vehicle index" data-zh="载具图鉴">Vehicle index</span><span class="qe-sub" data-en="Cars, bikes, boats, air" data-zh="汽车、摩托、船、飞机">Cars, bikes, boats, air</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#quick">
+          <img class="qe-thumb" src="../assets/img/scene-weapons.webp" width="1200" height="676" loading="lazy"
+               data-alt-en="Weapon index" data-alt-zh="武器图鉴" alt="Weapon index">
+          <span class="qe-txt"><span class="qe-name" data-en="Weapon index" data-zh="武器图鉴">Weapon index</span><span class="qe-sub" data-en="Stats, mods, where to find" data-zh="数值、改装、获取点">Stats, mods, where to find</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#trailer">
+          <img class="qe-thumb" src="../assets/img/scene-street-night.webp" width="1200" height="670" loading="lazy"
+               data-alt-en="Trailer breakdowns" data-alt-zh="预告片解析" alt="Trailer breakdowns">
+          <span class="qe-txt"><span class="qe-name" data-en="Trailer breakdowns" data-zh="预告片解析">Trailer breakdowns</span><span class="qe-sub" data-en="Frame by frame" data-zh="逐帧拆解">Frame by frame</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#about">
+          <img class="qe-thumb" src="../assets/img/scene-festival.webp" width="760" height="428" loading="lazy"
+               data-alt-en="Update log" data-alt-zh="版本更新日志" alt="Update log">
+          <span class="qe-txt"><span class="qe-name" data-en="Update log" data-zh="版本更新日志">Update log</span><span class="qe-sub" data-en="Patches and hotfixes" data-zh="补丁与热修">Patches and hotfixes</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a class="qe" href="#about">
+          <img class="qe-thumb" src="../assets/img/scene-dance.webp" width="1200" height="675" loading="lazy"
+               data-alt-en="FAQ" data-alt-zh="常见问题" alt="FAQ">
+          <span class="qe-txt"><span class="qe-name" data-en="FAQ" data-zh="常见问题">FAQ</span><span class="qe-sub" data-en="30 answers, sourced" data-zh="30 条有来源的解答">30 answers, sourced</span></span>
+          <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ VIDEOS ============================ -->
+  <section class="sec band-dark" id="videos" aria-labelledby="videos-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-en="Watch" data-zh="观看">Watch</p>
+        <div class="sec-head-row">
+          <h2 id="videos-h" data-en="Videos" data-zh="视频">Videos</h2>
+          <span class="stamp"><span data-en="Rockstar Games, official" data-zh="Rockstar 官方">Rockstar Games, official</span></span>
+        </div>
+      </div>
+
+      <div class="vid-grid">
+        <div>
+          <div class="vid-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/VQRLujxTm3c?si=BV4Rlx2bLlOjeuQU&start=3"
+                    title="Extended Look — what changed" loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div class="vid-cap">
+            <span class="cap" data-en="Extended Look — what changed" data-zh="Extended Look — 有哪些变化">Extended Look — what changed</span>
+            <span class="dim" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase">4:12 · VQRLujxTm3c</span>
+          </div>
+          <p class="note" data-en="Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel."
+             data-zh="两支官方预告片均使用 youtube-nocookie.com 域名嵌入以保护隐私。若播放器未能加载，请前往 Rockstar 官方频道观看。">Both official trailers are embedded with youtube-nocookie.com for privacy. If the player does not load, watch it on Rockstar's official channel.</p>
+        </div>
+
+        <!-- secondary column: two thumbnail links + AD 3 of 4 -->
+        <div class="vthumbs">
+          <a class="vthumb" href="https://www.youtube.com/watch?v=QdBZY2fkU-0" target="_blank" rel="noopener noreferrer">
+            <span class="vthumb-img">
+              <img src="../assets/img/scene-airboat.webp" width="1200" height="675" loading="lazy"
+                   data-alt-en="Trailer 1 — official, December 2023" data-alt-zh="第一支预告片 — 官方，2023 年 12 月" alt="Trailer 1 — official, December 2023">
+              <span class="vthumb-play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </span>
+            <span class="vthumb-txt">
+              <h3 data-en="Trailer 1 — official, December 2023" data-zh="第一支预告片 — 官方，2023 年 12 月">Trailer 1 — official, December 2023</h3>
+              <span class="vthumb-dur">1:31 · QdBZY2fkU-0</span>
+            </span>
+          </a>
+
+          <a class="vthumb" href="https://www.youtube.com/watch?v=VQRLujxTm3c" target="_blank" rel="noopener noreferrer">
+            <span class="vthumb-img">
+              <img src="../assets/img/scene-festival.webp" width="760" height="428" loading="lazy"
+                   data-alt-en="Trailer 2 — official, May 2025" data-alt-zh="第二支预告片 — 官方，2025 年 5 月" alt="Trailer 2 — official, May 2025">
+              <span class="vthumb-play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            </span>
+            <span class="vthumb-txt">
+              <h3 data-en="Trailer 2 — official, May 2025" data-zh="第二支预告片 — 官方，2025 年 5 月">Trailer 2 — official, May 2025</h3>
+              <span class="vthumb-dur">2:07 · VQRLujxTm3c</span>
+            </span>
+          </a>
+
+          <div class="ad ad-rail" role="complementary" data-ar-en="Advertisement" data-ar-zh="广告">
+            <span class="ad-label" data-en="Advertisement" data-zh="广告">Advertisement</span>
+            <span class="ad-size">300×250 / 300×600</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CLOSING CTA ============================ -->
+  <section class="band-cta" id="about" aria-labelledby="cta-h">
+    <div class="wrap">
+      <div class="newsletter">
+        <div>
+          <p class="eyebrow" data-en="usgame.net" data-zh="usgame.net">usgame.net</p>
+          <h2 id="cta-h" data-en="Get one email when a trailer or a big patch drops. No spam, unsubscribe anytime."
+              data-zh="有预告片或大型补丁时发一封邮件。不发广告，随时退订。">Get one email when a trailer or a big patch drops. No spam, unsubscribe anytime.</h2>
+          <form class="nl-form" id="nlForm">
+            <label for="nlEmail" style="position:absolute;left:-9999px" data-en="Email" data-zh="邮箱">Email</label>
+            <input id="nlEmail" type="email" name="email"
+                   data-ph-en="you@example.com" data-ph-zh="你的邮箱" placeholder="you@example.com">
+            <button class="btn btn-solid" type="submit" data-en="Notify me" data-zh="订阅提醒">Notify me</button>
+          </form>
+          <p class="dashed-note">
+            <span data-en="SAMPLE CONTENT" data-zh="示例内容">SAMPLE CONTENT</span> —
+            <span data-en="this form is not wired up yet." data-zh="此表单尚未接入后端。">this form is not wired up yet.</span>
+          </p>
+        </div>
+        <div>
+          <figure>
+            <img src="../assets/img/card-ambrosia.webp" width="700" height="394" loading="lazy" style="border-radius:var(--r);border:1px solid var(--line)"
+                 data-alt-en="Ambrosia, one of the four Leonida regions." data-alt-zh="安布罗西亚，雷欧奈达四大区域之一。"
+                 alt="Ambrosia, one of the four Leonida regions.">
+          </figure>
+        </div>
+      </div>
+      <p class="blurb" data-en="USGAME is an independent fan resource. Grand Theft Auto and all related marks are trademarks of Take-Two Interactive. We are not affiliated with Rockstar Games."
+         data-zh="USGAME 是独立的玩家资料站。Grand Theft Auto 及相关商标归 Take-Two Interactive 所有，本站与 Rockstar Games 无隶属关系。">USGAME is an independent fan resource. Grand Theft Auto and all related marks are trademarks of Take-Two Interactive. We are not affiliated with Rockstar Games.</p>
+    </div>
+  </section>
+
+  <!-- AD 4 of 4 — end of content -->
+  <div class="wrap">
+    <div class="ad ad-end" role="complementary" data-ar-en="Advertisement" data-ar-zh="广告">
+      <span class="ad-label" data-en="Advertisement" data-zh="广告">Advertisement</span>
+      <span class="ad-size">336×280 / 728×90</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <p class="ftr-brand">USGAME <span class="bdg">GTA VI</span></p>
+        <p class="ftr-tag" data-en="GTA VI news, guides and intel" data-zh="GTA6 新闻 · 攻略 · 情报">GTA VI news, guides and intel</p>
+      </div>
+
+      <div>
+        <h3 data-en="Guides" data-zh="攻略">Guides</h3>
+        <ul>
+          <li><a href="#guides" data-en="First three hours: a spoiler-free starting route" data-zh="开局前三小时：无剧透起手路线">First three hours: a spoiler-free starting route</a></li>
+          <li><a href="#guides" data-en="Robbery planning: how every heist is built" data-zh="抢劫机制：每一票的行动结构">Robbery planning: how every heist is built</a></li>
+          <li><a href="#guides" data-en="Collectibles and buried treasure, mapped" data-zh="收集品与海底宝藏全图">Collectibles and buried treasure, mapped</a></li>
+          <li><a href="#guides" data-en="Money early: businesses, safehouses and cash flow" data-zh="前期赚钱：生意、安全屋与现金流">Money early: businesses, safehouses and cash flow</a></li>
+          <li><a href="#guides" data-en="Flying in Leonida: every aircraft and where to steal it" data-zh="雷欧奈达飞行手册：全部飞行器与获取方式">Flying in Leonida: every aircraft and where to steal it</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 data-en="Site" data-zh="本站">Site</h3>
+        <ul>
+          <li><a href="#about" data-en="About" data-zh="关于本站">About</a></li>
+          <li><a href="#about" data-en="Contact" data-zh="联系方式">Contact</a></li>
+          <li><a href="#about" data-en="Privacy policy" data-zh="隐私政策">Privacy policy</a></li>
+          <li><a href="#about" data-en="Disclaimer" data-zh="免责声明">Disclaimer</a></li>
+          <li><a href="#about" data-en="Update log" data-zh="更新日志">Update log</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr-legal">
+      <span>© 2026 usgame.net</span>
+      <a class="more" href="#top"><span data-en="Back to top" data-zh="返回顶部">Back to top</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6M5 13l7-7 7 7"/></svg>
+      </a>
+      <div class="lang push" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="on" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var root = document.documentElement;
+
+  /* ---------- 1. LANGUAGE ---------------------------------------------- */
+  function setLang(lang){
+    root.lang = lang;
+    root.setAttribute('data-lang', lang);
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      el.textContent = (lang === 'zh') ? el.getAttribute('data-zh') : el.getAttribute('data-en');
+    });
+    document.querySelectorAll('[data-ph-en]').forEach(function(el){
+      el.placeholder = (lang === 'zh') ? el.getAttribute('data-ph-zh') : el.getAttribute('data-ph-en');
+    });
+    document.querySelectorAll('[data-ar-en]').forEach(function(el){
+      el.setAttribute('aria-label', (lang === 'zh') ? el.getAttribute('data-ar-zh') : el.getAttribute('data-ar-en'));
+    });
+    document.querySelectorAll('[data-alt-en]').forEach(function(el){
+      el.setAttribute('alt', (lang === 'zh') ? el.getAttribute('data-alt-zh') : el.getAttribute('data-alt-en'));
+    });
+    document.querySelectorAll('[data-lang]').forEach(function(b){
+      var on = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    try { localStorage.setItem('usgame-lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('[data-lang]').forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem('usgame-lang'); } catch (e) {}
+  if (saved === 'zh') { setLang('zh'); }
+
+  /* ---------- 2. HAMBURGER (open / close) ------------------------------- */
+  var burger = document.getElementById('burger');
+  var mnav = document.getElementById('mobileNav');
+  function setMenu(open){
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    mnav.hidden = !open;
+  }
+  burger.addEventListener('click', function(){
+    setMenu(burger.getAttribute('aria-expanded') !== 'true');
+  });
+  mnav.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ setMenu(false); });
+  });
+
+  /* ---------- 3. SEARCH PANEL (open / close) ---------------------------- */
+  var sToggle = document.getElementById('searchToggle');
+  var sRow = document.getElementById('searchRow');
+  var sInput = document.getElementById('searchInput');
+  sToggle.addEventListener('click', function(){
+    var open = sToggle.getAttribute('aria-expanded') !== 'true';
+    sToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    sRow.hidden = !open;
+    if (open) { sInput.focus(); }
+  });
+  document.getElementById('searchForm').addEventListener('submit', function(e){
+    e.preventDefault();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') { return; }
+    if (burger.getAttribute('aria-expanded') === 'true') { setMenu(false); burger.focus(); }
+    if (sToggle.getAttribute('aria-expanded') === 'true') {
+      sToggle.setAttribute('aria-expanded','false'); sRow.hidden = true; sToggle.focus();
+    }
+  });
+
+  /* ---------- 4. NEWS CATEGORY FILTER ---------------------------------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#newsGrid .news-card'));
+  var count = document.getElementById('newsCount');
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var f = btn.getAttribute('data-filter');
+      tabs.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      var shown = 0;
+      cards.forEach(function(c){
+        var show = (f === 'all') || (c.getAttribute('data-cat') === f);
+        c.hidden = !show;
+        if (show) { shown++; }
+      });
+      count.textContent = shown;
+    });
+  });
+
+  /* ---------- 5. NEWSLETTER (front-end only) ---------------------------- */
+  document.getElementById('nlForm').addEventListener('submit', function(e){ e.preventDefault(); });
+})();
+</script>
+</body>
+</html>

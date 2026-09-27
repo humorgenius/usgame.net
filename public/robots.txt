@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 站内搜索页是工具页，不是内容。页面本身已经带 noindex，这里再声明一次，
+# 免得爬虫把 /zh/search/?q=xxx 这类带参数的地址当内容页反复跑。
+Disallow: /en/search/
+Disallow: /zh/search/
+
+Sitemap: https://usgame.net/sitemap-index.xml

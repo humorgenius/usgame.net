@@ -1,0 +1,300 @@
+---
+// 首页正文。骨架取自设计稿 A 的 main 区（经浏览器规范化后落盘，原稿 trailer 区有一处
+// 误嵌套的 </div>，浏览器静默容忍、Astro 严格解析会直接报错）。
+//
+// 重要：设计稿里的卡片链接是 #news / #guides / #quick 这类**占位锚点** ——
+// 点了只在首页内滚动，看起来像文章链接其实到不了任何文章。本文件已改为
+// 从内容集合取真实文章：卡片标题、摘要、封面、阅读时长、链接全部来自真实数据，
+// 所以「标题」和「点进去的那篇」必然一致。
+import { getCollection } from "astro:content";
+import {
+  SECTIONS, sectionLabel, subLabel, sectionPath, articlePath, crumbTag,
+  readingMinutes, t, type Lang,
+} from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const articles = (await getCollection("articles", ({ data }) => !data.draft && data.lang === lang))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const bySection = (k: string) => articles.filter((a) => a.data.section === k);
+const secCover = (k: string) => bySection(k)[0]?.data.cover ?? "";
+const secCount = (k: string) => bySection(k).length;
+
+// 最新 6 篇：跨栏目混排，这样「全部 / 各栏目」筛选标签都有东西可筛。
+// date 全部相同（来自 .docx 的 mtime，它们是一次批量转出来的），所以用 order 做次序。
+const feed = [...articles]
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf() || a.data.order - b.data.order)
+  .slice(0, 6);
+
+// 上面「最新」已经露过脸的，下面「攻略」不再重复 —— 同一篇文章在首页出现两次很扎眼
+const shownInFeed = new Set(feed.map((a) => a.data.slug));
+const guides = bySection("guides").filter((a) => !shownInFeed.has(a.data.slug)).slice(0, 6);
+const feedSections = [...new Set(feed.map((a) => a.data.section))];
+const readWord = lang === "en" ? "Read" : "阅读";
+
+/**
+ * 页面内文案表。只在首页出现的字符串放这里，不进 i18n 词典（词典留给跨页复用的界面词）。
+ * 以前这些靠 data-en/data-zh 在浏览器里换 —— 后果是 /zh/ 的 HTML 源码是英文，
+ * 爬虫、AdSense 审核员、关掉 JS 的人看到的全是英文。现在构建期按 lang 选，源码即成品。
+ */
+const COPY = {
+  heroEbCjk:    { en: "Leonida, USA", zh: "雷欧奈达州" },
+  heroAlt:      { en: "Leonida at sunset: a chrome-and-neon skyline over the bay, seen through heat haze.", zh: "雷欧奈达的日落：热浪中隔海望去的霓虹天际线。" },
+  heroLine1:    { en: "Vice City", zh: "罪恶城" },
+  heroLine2:    { en: "Is Calling.", zh: "在等你。" },
+  heroLede:     { en: "Jason and Lucia have one shot at the easy life. Everything Rockstar has confirmed, every trailer frame we have picked apart, and the guides that will get you through Leonida on day one.", zh: "杰森与露西亚只有一次改变命运的机会。R星已经确认的一切、我们逐帧拆过的预告片，以及开局就能用上的雷欧奈达生存攻略。" },
+  latestNews:   { en: "Latest news", zh: "最新新闻" },
+  startGuides:  { en: "Start with the guides", zh: "从攻略开始" },
+  trailerEyebrow:{ en: "Official", zh: "官方" },
+  trailerH:     { en: "GTA6 Official Trailer", zh: "GTA6 官方预告片" },
+  allNews:      { en: "All news", zh: "全部新闻" },
+  filterLabel:  { en: "Filter by section", zh: "按栏目筛选" },
+  stories:      { en: "stories", zh: "篇" },
+  allGuides:    { en: "All guides", zh: "全部攻略" },
+  guidesSub:    { en: "Six write-ups that carry the first weekend: where to go, what it pays, what it costs you.", zh: "六篇撑起开局第一个周末的内容：去哪儿、能赚多少、代价是什么。" },
+  quickEyebrow: { en: "Intel", zh: "情报" },
+  quickH:       { en: "Quick entries", zh: "快速入口" },
+  videosEyebrow:{ en: "Watch", zh: "观看" },
+  rockstarCap:  { en: "Rockstar Games, official", zh: "Rockstar 官方" },
+  extendedCap:  { en: "Extended Look — what changed", zh: "Extended Look — 有哪些变化" },
+  ambrosiaAlt:  { en: "Ambrosia, one of the four Leonida regions.", zh: "安布罗西亚，雷欧奈达四大区域之一。" },
+  domain:       { en: "usgame.net", zh: "usgame.net" },
+  bmH:          { en: "Bookmark this site", zh: "把本站加进收藏夹" },
+  bmDrag:       { en: "Drag me to your bookmarks bar", zh: "拖我到收藏夹栏" },
+  bmDragHint:   { en: "Hold this button and drop it onto the bookmarks bar at the top of your browser — that is the whole bookmark.", zh: "按住这个按钮，拖到浏览器上方的收藏夹栏上松手，书签就成了。" },
+  bmCopy:       { en: "Copy the address", zh: "复制网址" },
+  bmCopied:     { en: "Copied", zh: "已复制" },
+  bmManual:     { en: "Select the address and copy it", zh: "请手动选中网址复制" },
+  blurb:        { en: "USGAME is an independent fan resource. Grand Theft Auto and all related marks are trademarks of Take-Two Interactive. We are not affiliated with Rockstar Games.", zh: "USGAME 是独立的玩家资料站。Grand Theft Auto 及相关商标归 Take-Two Interactive 所有，本站与 Rockstar Games 无隶属关系。" },
+};
+const c = (k: keyof typeof COPY) => COPY[k][lang];
+---
+<!-- ============================ HERO ============================ -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <img class="hero-img" src="/assets/img/hero-sunset.webp" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async" alt={c("heroAlt")}>
+    <span class="hero-glow" aria-hidden="true"></span>
+    <span class="hero-scrim" aria-hidden="true"></span>
+    <span class="hero-scan" aria-hidden="true"></span>
+
+    <div class="wrap hero-in">
+      <p class="eyebrow">
+        <span class="eb-l">Rockstar Games</span>
+        <span class="eb-sep" aria-hidden="true"></span>
+        <span class="eb-c">{c("heroEbCjk")}</span>
+      </p>
+      <h1 class="hero-title" id="hero-title">
+        <span class="ln fill">{c("heroLine1")}</span>
+        <span class="ln out">{c("heroLine2")}</span>
+      </h1>
+      <p class="lede">{c("heroLede")}</p>
+
+      <div class="cta-row">
+        <a class="btn btn-solid" href={sectionPath(lang, "news")}>{c("latestNews")}</a>
+        <a class="btn btn-ghost" href={sectionPath(lang, "guides")}>{c("startGuides")}</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================ TRAILER THEATRE ============================ -->
+  <section class="sec band-dark" id="trailer" aria-labelledby="trailer-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">{c("trailerEyebrow")}</p>
+        <div class="sec-head-row">
+          <h2 id="trailer-h">{c("trailerH")}</h2>
+          <span class="stamp"><span class="live" aria-hidden="true"></span><span>{t("updated", lang)}</span> 2026-09-24</span>
+        </div>
+      </div>
+
+      <div class="vid-frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/VQRLujxTm3c?si=BV4Rlx2bLlOjeuQU&amp;start=3&amp;enablejsapi=1" title={c("trailerH")} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================ LATEST NEWS ============================ -->
+  <section class="sec" id="news" aria-labelledby="news-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">{sectionLabel("news", lang)}</p>
+        <div class="sec-head-row">
+          <h2 id="news-h">{c("latestNews")}</h2>
+          <a class="more" href={sectionPath(lang, "news")}><span>{c("allNews")}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="tabs" role="group" aria-label={c("filterLabel")}>
+        <button class="tab" type="button" data-filter="all" aria-pressed="true">{t("allIn", lang)}</button>
+        {feedSections.map((k) => (
+          <button class="tab" type="button" data-filter={k} aria-pressed="false">{sectionLabel(k, lang)}</button>
+        ))}
+        <span class="tab-count"><span id="newsCount">{feed.length}</span> <span>{c("stories")}</span></span>
+      </div>
+
+      <div class="news-grid" id="newsGrid">
+        {feed.map((a, i) => (
+          <article class={"card news-card" + (i === 0 ? " lead" : "")} data-cat={a.data.section}>
+            <span class="card-media">
+              {a.data.cover && <img src={a.data.cover} width="1200" height="675" loading="lazy" decoding="async" alt={a.data.title} />}
+            </span>
+            <div class="card-body">
+              <p class="meta">
+                <span class="flag"><span class="cat">{crumbTag(a.data.section, a.data.subcategory, lang)}</span></span>
+                <time datetime={a.data.date.toISOString()}>{a.data.date.toISOString().slice(0, 10)}</time>
+              </p>
+              <h3 class="card-title">
+                <a href={articlePath(lang, a.data.section, a.data.slug)}>{a.data.title}</a>
+              </h3>
+              <p class="excerpt">{a.data.description}</p>
+              <p class="card-foot">
+                <span>{readingMinutes(a.body, lang)} {t("minRead", lang)}</span>
+                <span class="read"><span>{readWord}</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"></path></svg></span>
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ GUIDES ============================ -->
+  <section class="sec band-dark" id="guides" aria-labelledby="guides-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">{sectionLabel("guides", lang)}</p>
+        <div class="sec-head-row">
+          <h2 id="guides-h">{c("startGuides")}</h2>
+          <a class="more" href={sectionPath(lang, "guides")}><span>{c("allGuides")}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+        <p class="sec-sub">{c("guidesSub")}</p>
+      </div>
+
+      <div class="guide-grid">
+        {guides.map((a) => (
+          <article class="card">
+            <span class="card-media">
+              {a.data.cover && <img src={a.data.cover} width="1200" height="675" loading="lazy" decoding="async" alt={a.data.title} />}
+            </span>
+            <div class="card-body">
+              <div class="chips">
+                <span class="chip hi">{sectionLabel(a.data.section, lang)}</span>
+                {subLabel(a.data.section, a.data.subcategory, lang) &&
+                  <span class="chip">{subLabel(a.data.section, a.data.subcategory, lang)}</span>}
+              </div>
+              <h3 class="card-title">
+                <a href={articlePath(lang, a.data.section, a.data.slug)}>{a.data.title}</a>
+              </h3>
+              <p class="card-foot">
+                <span>{readingMinutes(a.body, lang)} {t("minRead", lang)}</span>
+                <span class="read"><span>{readWord}</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"></path></svg></span>
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ QUICK ENTRIES ============================ -->
+  <section class="sec" id="quick" aria-labelledby="quick-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">{c("quickEyebrow")}</p>
+        <div class="sec-head-row">
+          <h2 id="quick-h">{c("quickH")}</h2>
+          <span class="stamp"><span class="live" aria-hidden="true"></span>{articles.length} <span>{t("articles", lang)}</span></span>
+        </div>
+      </div>
+
+      <div class="qe-grid">
+        {SECTIONS.map((s) => (
+          <a class="qe" href={sectionPath(lang, s.k)}>
+            {secCover(s.k) && <img class="qe-thumb" src={secCover(s.k)} width="1200" height="675" loading="lazy" decoding="async" alt="" />}
+            <span class="qe-txt">
+              <span class="qe-name">{s[lang]}</span>
+              <span class="qe-sub">{secCount(s.k)} {t("articles", lang)}</span>
+            </span>
+            <svg class="qe-arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ VIDEOS ============================ -->
+  <section class="sec band-dark" id="videos" aria-labelledby="videos-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">{c("videosEyebrow")}</p>
+        <div class="sec-head-row">
+          <h2 id="videos-h">{sectionLabel("videos", lang)}</h2>
+          <span class="stamp"><span>{c("rockstarCap")}</span></span>
+        </div>
+      </div>
+
+      <div class="vid-grid">
+        <div>
+          <div class="vid-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/VQRLujxTm3c?si=BV4Rlx2bLlOjeuQU&amp;start=3&amp;enablejsapi=1" title={c("extendedCap")} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+          </div>
+          <div class="vid-cap">
+            <span class="cap">{c("extendedCap")}</span>
+            {/* 这里原来挂的是「4:12 · VQRLujxTm3c」—— 视频 ID 是给开发者看的，
+                 读者看到一串乱码只会觉得是 bug。保留时长，删掉 ID。
+                 嵌入播放所必需的那份 ID 仍在 iframe 的 src 里，没有动。 */}
+            <span class="dim" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase">4:12</span>
+          </div>
+        </div>
+        </div>
+      </div>
+    
+  </section>
+
+  <!-- =============== CLOSING · 把本站加进收藏夹 ===============
+     这个位置换过两回：先是留邮箱的订阅框（没接后端，是块假 UI，
+     填了发不出去也存不下来），再是 RSS 追更面板，现在是收藏夹。
+     收藏夹比 RSS 更实际 —— 会翻收藏夹的人远多于会用阅读器的人。
+     唯一的限制是浏览器不允许网页自己往收藏夹里写东西（安全策略），
+     所以这里只能把快捷键讲清楚，不能替读者点那一下。 -->
+  <section class="band-cta" id="about" aria-labelledby="cta-h">
+    <div class="wrap">
+      <div class="newsletter">
+        <div>
+          <p class="eyebrow">{c("domain")}</p>
+          <h2 id="cta-h">{c("bmH")}</h2>
+          <div class="keep-row">
+            <!-- 真的可以拖：锚点拖到收藏夹栏上放手就是一个书签。
+                 这是网页唯一能做到的"一个动作完成收藏"。 -->
+            <!-- 这里刻意让"浏览器读到的文字"和"人看到的文字"不一样：
+                 拖到收藏夹栏时，书签名取的是锚点的真实文字（已用 CDP 抓拖拽载荷实测），
+                 所以真实文字写书签名 USGAME-GTA6，按钮上显示的中文标签由 CSS ::after 生成 ——
+                 CSS 生成的内容不参与序列化，浏览器看不见它。两不耽误。 -->
+            <a class="bm-drag" id="bmDrag" href={`/${lang}/`} draggable="true"
+               title="USGAME-GTA6" aria-label={c("bmDrag")} data-label={c("bmDrag")}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.85-4.2 4.1 1 5.75L12 16.9l-5.2 2.7 1-5.75-4.2-4.1 5.8-.85z"/></svg>
+              USGAME-GTA6
+            </a>
+            <button class="btn btn-ghost" type="button" id="copyUrl"
+                    data-copy={`/${lang}/`}
+                    data-copied={c("bmCopied")}
+                    data-manual={c("bmManual")}>{c("bmCopy")}</button>
+          </div>
+          <p class="keep-hint">{c("bmDragHint")}</p>
+        </div>
+        <div>
+          <figure>
+            <img src="/assets/img/card-ambrosia.webp" width="700" height="394" loading="lazy" style="border-radius:var(--r);border:1px solid var(--line)" alt={c("ambrosiaAlt")}>
+          </figure>
+        </div>
+      </div>
+      <p class="blurb">{c("blurb")}</p>
+    </div>
+  </section>

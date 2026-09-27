@@ -1,0 +1,3 @@
+# ads.txt —— 声明谁有权卖本站的广告位
+# 现在是站长（DIRECT）授权 Google 销售；AdSense 审核通过后无需再改这一行。
+google.com, pub-9680789453651246, DIRECT, f08c47fec0942fa0
