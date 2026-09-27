@@ -2,7 +2,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// 语言路由：/en/… 与 /zh/… 都带前缀（根路径 / 由页面自己渲染双语网关，不自动跳转）。
+// 语言路由：/en/… 与 /zh/… 都带前缀。根路径 / 是一个跳转到 /en/ 的重定向存根
+// （src/pages/index.astro），不是内容页，因此也不进 sitemap。
 // 中英共用同一套 slug，所以互指链接只是换前缀 —— 不会退回首页。
 export default defineConfig({
   site: 'https://usgame.net',
@@ -18,7 +19,9 @@ export default defineConfig({
       i18n: { defaultLocale: 'en', locales: { en: 'en', zh: 'zh-Hans' } },
       // 搜索页不进 sitemap：它是站内工具，收录了只会跟真正的内容页抢关键词。
       // 404 页同理 —— 错误页被收录，搜索结果里就会出现一条"找不到页面"。
-      filter: (page) => !page.includes('/search/') && !page.includes('404'),
+      // 根路径 / 也不进：它是跳转到 /en/ 的重定向存根，sitemap 只该列 200 的规范页。
+      filter: (page) => !page.includes('/search/') && !page.includes('404')
+        && new URL(page).pathname !== '/',
     }),
   ],
   devToolbar: { enabled: false },
